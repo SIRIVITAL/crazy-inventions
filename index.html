@@ -1,0 +1,2862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>⚙️ Crazy Inventions: The Rube Goldberg Challenge</title>
+<style>
+:root{
+  --brass:#c9a227;--copper:#b87333;--dark:#0d0d0d;--card:#1a1610;
+  --rust:#7a2e0e;--cream:#f0ece0;--dim:#8a8478;--success:#27ae60;
+  --danger:#c0392b;--blue:#2980b9;--shadow:rgba(201,162,39,.25);
+  --border:rgba(201,162,39,.35);--font-head:'Trebuchet MS',Impact,sans-serif;
+  --font-body:Georgia,'Times New Roman',serif;--font-mono:'Courier New',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{background:var(--dark);color:var(--cream);font-family:var(--font-body);min-height:100vh;overflow-x:hidden;position:relative;}
+::selection{background:var(--brass);color:var(--dark);}
+
+/* BACKGROUND */
+.bg-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.bg-layer::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(139,67,19,.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(201,162,39,.08) 0%,transparent 50%);}
+.gear-float{position:absolute;opacity:.06;animation:spinGear linear infinite;font-size:inherit;line-height:1;color:var(--brass);}
+.gf1{font-size:220px;top:-60px;left:-60px;animation-duration:40s;}
+.gf2{font-size:140px;top:15%;right:-40px;animation-duration:25s;animation-direction:reverse;}
+.gf3{font-size:350px;bottom:-100px;right:-100px;animation-duration:55s;}
+.gf4{font-size:110px;bottom:25%;left:-25px;animation-duration:20s;animation-direction:reverse;}
+.gf5{font-size:90px;top:45%;left:35%;animation-duration:60s;}
+@keyframes spinGear{to{transform:rotate(360deg);}}
+
+/* LAYOUT */
+#app{position:relative;z-index:1;min-height:100vh;max-width:860px;margin:0 auto;padding:16px;}
+
+/* TYPOGRAPHY */
+h1{font-family:var(--font-head);letter-spacing:2px;}
+h2{font-family:var(--font-head);letter-spacing:1px;}
+h3{font-family:var(--font-head);}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin:12px 0;box-shadow:0 4px 20px rgba(0,0,0,.5);}
+.card-sm{padding:16px;border-radius:8px;}
+
+/* BUTTONS */
+.btn{display:inline-block;padding:12px 28px;border:none;border-radius:8px;font-family:var(--font-head);font-size:1rem;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:1px;position:relative;overflow:hidden;touch-action:manipulation;}
+.btn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.1);opacity:0;transition:opacity .2s;}
+.btn:hover::after{opacity:1;}
+.btn:active{transform:scale(.97);}
+.btn-gold{background:linear-gradient(135deg,var(--brass),var(--copper));color:var(--dark);}
+.btn-outline{background:transparent;border:2px solid var(--brass);color:var(--brass);}
+.btn-outline:hover{background:rgba(201,162,39,.1);}
+.btn-danger{background:var(--danger);color:white;}
+.btn-success{background:var(--success);color:white;}
+.btn-blue{background:var(--blue);color:white;}
+.btn-ghost{background:rgba(255,255,255,.07);color:var(--cream);border:1px solid var(--border);}
+.btn-lg{padding:16px 36px;font-size:1.15rem;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+.btn:disabled::after{display:none;}
+.btn-block{display:block;width:100%;text-align:center;}
+.btn:active:not(:disabled){transform:scale(.95) !important;opacity:.85;}
+.word-bank-word:active{background:rgba(201,162,39,.25);border-color:var(--brass);}
+.comp-option:active{border-color:var(--brass);background:rgba(201,162,39,.07);}
+.vocab-word-card:active{border-color:var(--brass);background:rgba(201,162,39,.1);}
+.vocab-def-card:active{border-color:var(--brass);background:rgba(201,162,39,.1);}
+
+/* PROGRESS */
+.progress-bar-wrap{background:rgba(255,255,255,.07);border-radius:99px;height:10px;overflow:hidden;border:1px solid var(--border);}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--copper),var(--brass));border-radius:99px;transition:width .5s ease;}
+
+/* STARS */
+.stars{color:var(--brass);font-size:1.3rem;letter-spacing:2px;}
+
+/* BADGES */
+.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.75rem;font-family:var(--font-head);letter-spacing:.5px;}
+.badge-gold{background:var(--brass);color:var(--dark);}
+.badge-green{background:var(--success);color:white;}
+.badge-red{background:var(--danger);color:white;}
+.badge-blue{background:var(--blue);color:white;}
+
+/* INPUTS */
+input[type=text],input[type=tel],textarea{background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:8px;color:var(--cream);padding:12px 16px;font-size:1rem;font-family:var(--font-body);width:100%;outline:none;transition:border-color .2s;}
+input[type=text]:focus,input[type=tel]:focus,textarea:focus{border-color:var(--brass);}
+textarea{resize:vertical;min-height:120px;}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:20px 0;}
+
+/* SECTION BADGE */
+.sec-badge{display:inline-block;width:36px;height:36px;border-radius:50%;background:var(--brass);color:var(--dark);font-family:var(--font-head);font-size:1rem;font-weight:bold;text-align:center;line-height:36px;}
+
+/* ============ SCREEN: WELCOME ============ */
+.welcome-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
+.welcome-title{font-size:clamp(2rem,8vw,4rem);color:var(--brass);text-shadow:0 0 40px rgba(201,162,39,.5);margin-bottom:8px;animation:titlePulse 3s ease-in-out infinite;}
+@keyframes titlePulse{0%,100%{text-shadow:0 0 40px rgba(201,162,39,.5);}50%{text-shadow:0 0 80px rgba(201,162,39,.9),0 0 120px rgba(201,162,39,.4);}}
+.welcome-sub{font-size:clamp(.9rem,3vw,1.4rem);color:var(--dim);letter-spacing:3px;margin-bottom:40px;font-family:var(--font-mono);}
+.chain-visual{display:flex;align-items:center;justify-content:center;gap:8px;margin:30px 0;font-size:1.8rem;animation:chainMove 2s ease-in-out infinite;}
+@keyframes chainMove{0%,100%{transform:translateX(0);}50%{transform:translateX(8px);}}
+.chain-item{animation:bounceChain .6s ease-in-out infinite alternate;}
+.chain-item:nth-child(2){animation-delay:.1s;}
+.chain-item:nth-child(3){animation-delay:.2s;}
+.chain-item:nth-child(4){animation-delay:.3s;}
+.chain-item:nth-child(5){animation-delay:.4s;}
+@keyframes bounceChain{to{transform:translateY(-5px);}}
+
+/* ============ SCREEN: LEVEL ============ */
+.level-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:20px;}
+.level-card{border:2px solid transparent;border-radius:16px;padding:24px;text-align:center;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;touch-action:manipulation;}
+.level-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .25s;}
+.level-card:hover{transform:translateY(-4px);}
+.level-card.lv1{border-color:var(--success);}
+.level-card.lv1::before{background:rgba(39,174,96,.08);}
+.level-card.lv1:hover::before{opacity:1;}
+.level-card.lv2{border-color:var(--brass);}
+.level-card.lv2::before{background:rgba(201,162,39,.08);}
+.level-card.lv2:hover::before{opacity:1;}
+.level-card.lv3{border-color:var(--danger);}
+.level-card.lv3::before{background:rgba(192,57,43,.08);}
+.level-card.lv3:hover::before{opacity:1;}
+.level-icon{font-size:3rem;margin-bottom:12px;display:block;}
+.level-label{font-family:var(--font-head);font-size:1.2rem;margin-bottom:8px;}
+.level-desc{font-size:.85rem;color:var(--dim);line-height:1.5;}
+.level-card.selected{transform:translateY(-4px) scale(1.02);}
+.level-card.lv1.selected{background:rgba(39,174,96,.15);}
+.level-card.lv2.selected{background:rgba(201,162,39,.15);}
+.level-card.lv3.selected{background:rgba(192,57,43,.15);}
+
+/* ============ SCREEN: HUB ============ */
+.hub-header{text-align:center;margin-bottom:30px;}
+.hub-score{font-family:var(--font-mono);font-size:2rem;color:var(--brass);margin:8px 0;}
+.mission-cards{display:grid;gap:16px;}
+.mission-card{display:flex;align-items:center;gap:16px;padding:20px;cursor:pointer;transition:all .2s;position:relative;touch-action:manipulation;}
+.mission-card:hover:not(.locked){transform:translateX(6px);}
+.mission-card.locked{opacity:.5;cursor:not-allowed;}
+.mission-icon{font-size:2.5rem;flex-shrink:0;}
+.mission-info{flex:1;}
+.mission-title{font-family:var(--font-head);font-size:1.1rem;color:var(--brass);}
+.mission-sub{font-size:.85rem;color:var(--dim);margin-top:4px;}
+.mission-progress{margin-top:8px;}
+.mission-arrow{font-size:1.5rem;color:var(--brass);}
+.mission-lock{font-size:1.5rem;color:var(--dim);}
+.mission-badge{display:flex;gap:4px;margin-top:6px;}
+
+/* ============ ACTIVITY SCREEN ============ */
+.act-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.act-section-name{flex:1;font-family:var(--font-head);font-size:1rem;color:var(--brass);}
+.act-score-badge{font-family:var(--font-mono);color:var(--brass);}
+.act-steps{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap;}
+.step-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-family:var(--font-head);cursor:pointer;transition:all .2s;color:var(--dim);touch-action:manipulation;}
+.step-dot.done{background:var(--success);border-color:var(--success);color:white;}
+.step-dot.active{border-color:var(--brass);color:var(--brass);background:rgba(201,162,39,.1);}
+.step-dot.optional{border-style:dashed;}
+.act-title{font-family:var(--font-head);font-size:1.4rem;margin-bottom:6px;}
+.act-subtitle{color:var(--dim);font-size:.9rem;margin-bottom:20px;}
+.act-content{margin-bottom:24px;}
+.act-nav{display:flex;gap:12px;justify-content:space-between;margin-top:24px;}
+
+/* ============ VOCAB MATCH ============ */
+.vocab-words{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:20px;}
+.vocab-word-card{padding:14px;border:2px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;text-align:center;background:rgba(255,255,255,.03);touch-action:manipulation;min-height:44px;}
+.vocab-word-card:hover{border-color:var(--brass);}
+.vocab-word-card.selected{border-color:var(--brass);background:rgba(201,162,39,.15);}
+.vocab-word-card.matched{border-color:var(--success);background:rgba(39,174,96,.1);color:var(--success);cursor:default;}
+.vocab-word-card.wrong{border-color:var(--danger);background:rgba(192,57,43,.15);animation:shake .3s ease;}
+.vocab-word{font-family:var(--font-head);font-size:.95rem;}
+.vocab-hebrew{font-size:.78rem;color:var(--dim);margin-top:4px;direction:rtl;}
+.vocab-emoji{font-size:1.5rem;margin-bottom:4px;}
+.vocab-defs{display:grid;grid-template-columns:1fr;gap:8px;}
+.vocab-def-card{padding:12px 16px;border:2px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;font-size:.9rem;background:rgba(255,255,255,.03);touch-action:manipulation;min-height:44px;}
+.vocab-def-card:hover{border-color:var(--brass);}
+.vocab-def-card.selected{border-color:var(--brass);background:rgba(201,162,39,.15);}
+.vocab-def-card.matched{border-color:var(--success);background:rgba(39,174,96,.1);color:var(--success);cursor:default;}
+.vocab-def-card.wrong{border-color:var(--danger);animation:shake .3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+.vocab-score-display{text-align:center;font-family:var(--font-mono);font-size:1.1rem;color:var(--brass);margin-top:12px;}
+
+/* ============ AUDIO READING ============ */
+.text-display{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:22px;line-height:2;font-size:1rem;}
+.text-word{display:inline;transition:background .15s,color .15s;}
+.text-word.hl{background:var(--brass);color:var(--dark);border-radius:3px;padding:1px 3px;}
+.text-word.hl-done{color:rgba(201,162,39,.6);}
+.audio-controls{display:flex;align-items:center;gap:14px;margin-top:16px;padding:14px;background:rgba(255,255,255,.04);border-radius:8px;border:1px solid var(--border);}
+.audio-btn{width:48px;height:48px;border-radius:50%;border:2px solid var(--brass);background:transparent;color:var(--brass);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;touch-action:manipulation;}
+.audio-btn:active{background:rgba(201,162,39,.4) !important;}
+.audio-btn:hover{background:rgba(201,162,39,.2);}
+.audio-btn.playing{background:var(--brass);color:var(--dark);}
+.audio-status{flex:1;font-size:.85rem;color:var(--dim);padding:0 8px;}
+.audio-slider-wrap{display:none;}
+.audio-slider-fill{height:100%;background:var(--brass);border-radius:99px;transition:width .2s;pointer-events:none;}
+.audio-slider-thumb{position:absolute;top:50%;transform:translateY(-50%);width:16px;height:16px;border-radius:50%;background:var(--brass);transition:left .2s;pointer-events:none;}
+.audio-time{font-family:var(--font-mono);font-size:.8rem;color:var(--dim);min-width:40px;text-align:right;}
+.audio-speed{font-family:var(--font-mono);font-size:.8rem;color:var(--dim);cursor:pointer;border:1px solid var(--border);border-radius:4px;padding:2px 6px;background:transparent;color:var(--cream);}
+
+/* ============ CLOZE ============ */
+.cloze-mode-btns{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.cloze-mode-btn{padding:8px 16px;border-radius:6px;font-family:var(--font-head);font-size:.8rem;cursor:pointer;border:2px solid var(--border);background:transparent;color:var(--dim);transition:all .2s;}
+.cloze-mode-btn.active{border-color:var(--brass);color:var(--brass);background:rgba(201,162,39,.1);}
+.cloze-text{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:22px;line-height:2.4;font-size:1rem;}
+.cloze-blank{display:inline-block;position:relative;}
+.cloze-input{border:none;border-bottom:2px solid var(--brass);background:rgba(201,162,39,.1);color:var(--cream);padding:2px 6px;font-size:.95rem;font-family:var(--font-body);min-width:60px;max-width:min(160px,42vw);outline:none;border-radius:4px 4px 0 0;text-align:center;}
+.cloze-input.correct{border-bottom-color:var(--success);background:rgba(39,174,96,.15);color:var(--success);}
+.cloze-input.wrong{border-bottom-color:var(--danger);background:rgba(192,57,43,.15);animation:shake .3s ease;}
+.cloze-input.filled{border-bottom-color:var(--blue);}
+.cloze-hint{font-size:.7rem;color:var(--dim);position:absolute;top:-16px;left:0;}
+.word-bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;padding:12px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid var(--border);}
+.word-bank-word{padding:8px 14px;border:1px solid var(--border);border-radius:99px;cursor:pointer;font-size:.9rem;transition:all .2s;touch-action:manipulation;min-height:36px;display:inline-flex;align-items:center;}
+.word-bank-word:hover{border-color:var(--brass);color:var(--brass);}
+.word-bank-word.used{opacity:.3;text-decoration:line-through;cursor:not-allowed;}
+.cloze-submit{margin-top:16px;}
+.cloze-score-wrap{margin-top:12px;padding:12px;border-radius:8px;background:rgba(255,255,255,.04);text-align:center;}
+
+/* ============ MINI GAMES ============ */
+/* Memory Flip */
+.memory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0;}
+@media(max-width:480px){.memory-grid{grid-template-columns:repeat(3,1fr);gap:7px;}}
+.mem-card{aspect-ratio:3/4;perspective:600px;cursor:pointer;touch-action:manipulation;}
+.mem-card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .4s;}
+.mem-card.flipped .mem-card-inner{transform:rotateY(180deg);}
+.mem-card.matched .mem-card-inner{transform:rotateY(180deg);}
+.mem-card-front,.mem-card-back{position:absolute;inset:0;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:8px;text-align:center;backface-visibility:hidden;font-size:.75rem;}
+.mem-card-front{background:linear-gradient(135deg,var(--rust),#4a1a05);border:2px solid var(--copper);font-size:1.5rem;}
+.mem-card-back{background:var(--card);border:2px solid var(--border);transform:rotateY(180deg);}
+.mem-card.matched .mem-card-back{border-color:var(--success);background:rgba(39,174,96,.15);color:var(--success);}
+.game-timer{font-family:var(--font-mono);font-size:2rem;text-align:center;color:var(--brass);margin:8px 0;}
+.game-timer.urgent{color:var(--danger);animation:timerPulse .5s ease infinite alternate;}
+@keyframes timerPulse{to{transform:scale(1.1);}}
+.game-stats{display:flex;justify-content:space-around;margin:12px 0;}
+.game-stat{text-align:center;}
+.game-stat-val{font-family:var(--font-mono);font-size:1.5rem;color:var(--brass);}
+.game-stat-lbl{font-size:.75rem;color:var(--dim);}
+
+/* Word Catcher */
+.catcher-arena{position:relative;height:240px;min-height:180px;background:rgba(255,255,255,.03);border-radius:10px;border:1px solid var(--border);overflow:hidden;margin:16px 0;}
+.catcher-def{padding:12px;text-align:center;font-size:.95rem;background:rgba(201,162,39,.1);border-radius:8px;border:1px solid var(--border);margin-bottom:8px;}
+.catcher-word{position:absolute;padding:8px 16px;border-radius:99px;border:2px solid var(--brass);background:rgba(201,162,39,.15);font-family:var(--font-head);cursor:pointer;transition:all .15s;user-select:none;font-size:.9rem;}
+.catcher-word:hover{background:rgba(201,162,39,.3);}
+.catcher-word.correct-catch{background:var(--success);border-color:var(--success);color:white;animation:popGood .3s ease;}
+.catcher-word.wrong-catch{background:var(--danger);border-color:var(--danger);color:white;animation:popBad .3s ease;}
+@keyframes popGood{0%{transform:scale(1);}50%{transform:scale(1.3);}100%{transform:scale(1);}}
+@keyframes popBad{0%,100%{transform:translateX(0);}25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}
+.catcher-btns{display:flex;gap:12px;}
+
+/* Speed Quiz */
+.quiz-statement{font-size:1.1rem;text-align:center;padding:24px;background:rgba(255,255,255,.04);border-radius:10px;border:1px solid var(--border);min-height:100px;display:flex;align-items:center;justify-content:center;margin:16px 0;line-height:1.6;}
+.quiz-btns{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;}
+.quiz-tf-btn{padding:20px;font-size:1.2rem;font-family:var(--font-head);border-radius:10px;cursor:pointer;border:3px solid transparent;transition:all .2s;}
+.quiz-tf-btn.true-btn{border-color:var(--success);color:var(--success);background:rgba(39,174,96,.08);}
+.quiz-tf-btn.false-btn{border-color:var(--danger);color:var(--danger);background:rgba(192,57,43,.08);}
+.quiz-tf-btn:hover.true-btn{background:rgba(39,174,96,.2);}
+.quiz-tf-btn:hover.false-btn{background:rgba(192,57,43,.2);}
+.quiz-tf-btn.correct-ans{background:var(--success) !important;border-color:var(--success) !important;color:white;}
+.quiz-tf-btn.wrong-ans{background:var(--danger) !important;border-color:var(--danger) !important;color:white;}
+.quiz-countdown{display:flex;align-items:center;justify-content:center;gap:12px;margin:8px 0;}
+.countdown-ring{width:50px;height:50px;position:relative;}
+.countdown-svg{transform:rotate(-90deg);width:50px;height:50px;}
+.countdown-circle{fill:none;stroke:var(--brass);stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset .1s linear;}
+.countdown-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:1.1rem;color:var(--brass);}
+.quiz-q-counter{font-family:var(--font-mono);font-size:.85rem;color:var(--dim);}
+
+/* ============ COMPREHENSION ============ */
+.comp-question{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border);}
+.comp-q-type{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.comp-q-type.factual{color:var(--blue);}
+.comp-q-type.inference{color:var(--copper);}
+.comp-q-type.higher-order{color:var(--danger);}
+.comp-q-text{font-size:1rem;margin-bottom:12px;line-height:1.6;}
+.comp-options{display:grid;gap:8px;}
+.comp-option{padding:12px 16px;border:2px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;font-size:.9rem;background:rgba(255,255,255,.03);text-align:left;min-height:44px;touch-action:manipulation;width:100%;}
+.comp-option:hover{border-color:var(--brass);}
+.comp-option.selected{border-color:var(--brass);background:rgba(201,162,39,.1);}
+.comp-option.correct{border-color:var(--success);background:rgba(39,174,96,.15);color:var(--success);}
+.comp-option.wrong{border-color:var(--danger);background:rgba(192,57,43,.15);color:var(--danger);}
+.comp-explanation{margin-top:10px;padding:10px 14px;border-radius:6px;background:rgba(255,255,255,.06);font-size:.85rem;color:var(--dim);display:none;line-height:1.5;}
+.comp-explanation.show{display:block;}
+
+/* ============ TRANSLATION ============ */
+.translation-text{padding:20px;background:rgba(255,255,255,.04);border-radius:10px;border:1px solid var(--border);margin-top:16px;font-size:.95rem;line-height:1.8;direction:rtl;text-align:right;display:none;}
+.translation-text.show{display:block;}
+
+/* ============ RECORDING ============ */
+.recording-controls{display:flex;flex-direction:column;align-items:center;gap:16px;padding:24px;}
+.rec-btn{width:80px;height:80px;border-radius:50%;border:none;cursor:pointer;font-size:2rem;transition:all .2s;display:flex;align-items:center;justify-content:center;touch-action:manipulation;}
+.rec-btn-start{background:var(--danger);}
+.rec-btn-stop{background:rgba(255,255,255,.1);border:2px solid var(--danger);animation:recPulse 1s ease infinite alternate;}
+@keyframes recPulse{to{box-shadow:0 0 20px var(--danger);}}
+.rec-status{font-family:var(--font-mono);color:var(--dim);}
+.rec-playback{margin-top:16px;width:100%;}
+audio{width:100%;border-radius:8px;margin-top:8px;}
+
+/* ============ RESULTS ============ */
+.results-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;padding:24px 16px 48px;}
+.score-circle{width:160px;height:160px;border-radius:50%;border:6px solid var(--brass);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:24px auto;background:rgba(201,162,39,.08);box-shadow:0 0 40px rgba(201,162,39,.2);}
+.score-num{font-family:var(--font-mono);font-size:3rem;color:var(--brass);}
+.score-pct{font-family:var(--font-mono);font-size:1rem;color:var(--dim);}
+.results-table{width:100%;text-align:left;border-collapse:collapse;margin:16px 0;}
+.results-table th,.results-table td{padding:10px 12px;border-bottom:1px solid var(--border);}
+.results-table th{font-family:var(--font-head);font-size:.85rem;color:var(--dim);}
+.copy-box{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;padding:16px;font-family:var(--font-mono);font-size:.8rem;text-align:left;white-space:pre-wrap;word-break:break-word;margin:12px 0;max-height:200px;overflow-y:auto;}
+
+/* ============ BONUS ============ */
+.bonus-section{background:rgba(201,162,39,.05);border:1px dashed var(--brass);border-radius:10px;padding:20px;margin-top:20px;}
+.bonus-title{font-family:var(--font-head);color:var(--brass);font-size:1.1rem;margin-bottom:12px;}
+.bonus-inputs{display:grid;gap:12px;margin-top:12px;}
+.bonus-label{font-size:.85rem;color:var(--dim);margin-bottom:4px;}
+
+/* ============ FEEDBACK FLASH ============ */
+.flash{position:fixed;top:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:8px;font-family:var(--font-head);font-size:.95rem;z-index:999;animation:flashIn .3s ease,flashOut .3s ease 1.7s forwards;pointer-events:none;}
+.flash-good{background:var(--success);color:white;}
+.flash-bad{background:var(--danger);color:white;}
+.flash-info{background:var(--blue);color:white;}
+@keyframes flashIn{from{opacity:0;transform:translate(-50%,-20px);}to{opacity:1;transform:translate(-50%,0);}}
+@keyframes flashOut{to{opacity:0;transform:translate(-50%,-20px);}}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:600px){
+  #app{padding:12px;}
+  .card{padding:16px;}
+  .memory-grid{grid-template-columns:repeat(3,1fr);gap:6px;}
+  .comp-option{font-size:.85rem;padding:10px 12px;}
+  .act-steps{gap:4px;}
+  .step-dot{width:24px;height:24px;font-size:.65rem;}
+  .btn-lg{padding:14px 28px;}
+  .score-circle{width:130px;height:130px;}
+  .score-num{font-size:2.5rem;}
+  .quiz-btns{gap:10px;}
+  .quiz-tf-btn{padding:14px;font-size:1rem;}
+  .act-nav{gap:8px;}
+  .act-nav .btn{padding:10px 16px;font-size:.85rem;}
+}
+@media(max-width:400px){
+  .cloze-text{padding:14px;font-size:.92rem;}
+  .word-bank{padding:8px;gap:6px;}
+  .word-bank-word{padding:5px 9px;font-size:.82rem;}
+}
+
+/* ============ UTILS ============ */
+.flex{display:flex;}.flex-center{align-items:center;}.gap-8{gap:8px;}.gap-12{gap:12px;}
+.text-center{text-align:center;}.text-sm{font-size:.85rem;}.text-dim{color:var(--dim);}
+.text-brass{color:var(--brass);}.text-success{color:var(--success);}.text-danger{color:var(--danger);}
+.mt-8{margin-top:8px;}.mt-12{margin-top:12px;}.mt-16{margin-top:16px;}.mt-24{margin-top:24px;}
+.mb-8{margin-bottom:8px;}.mb-12{margin-bottom:12px;}.mb-16{margin-bottom:16px;}
+.fw-bold{font-weight:bold;}
+.hidden{display:none !important;}
+.fade-in{animation:fadeIn .4s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* v9 pedagogy/contrast overrides */
+.comp-option,.word-bank-word,.vocab-word-card,.vocab-def-card,.cloze-input,textarea,input[type=text]{color:var(--cream);}
+.comp-option.correct,.comp-option.wrong,.vocab-word-card.matched,.vocab-def-card.matched{font-weight:bold;}
+.text-dim{color:#c6bfb1;}
+.audio-status{color:#ddd4c7;}
+.badge-blue{background:#4c78a8;color:white;}
+.badge-gold{background:var(--brass);color:#111;}
+.translation-help-box{background:rgba(39,174,96,.08);border:1px solid rgba(39,174,96,.2);border-radius:8px;padding:12px;margin:12px 0;direction:rtl;text-align:right;}
+</style>
+</head>
+<body>
+<div class="bg-layer">
+  <div class="gear-float gf1">⚙</div>
+  <div class="gear-float gf2">⚙</div>
+  <div class="gear-float gf3">⚙</div>
+  <div class="gear-float gf4">⚙</div>
+  <div class="gear-float gf5">⚙</div>
+</div>
+<div id="app"></div>
+<script>
+// ═══════════════════════════════════════════════
+//  C O N T E N T   D A T A
+// ═══════════════════════════════════════════════
+const DATA = {
+  sections: [
+    {
+      id: 1,
+      icon: '⚙️',
+      title: 'Part 1: Rube Goldberg',
+      subtitle: '1883 – 1970',
+      mission: 'Learn about the man behind the crazy machines.',
+      text: `As a child, Rube Goldberg loved being creative – he especially loved to draw. Rube was allowed to take art lessons even though his father didn't want him to be an artist. Rube's father knew that it was difficult to earn money as an artist. So he convinced Rube to study engineering since many great artists, like Leonardo da Vinci, had had some training in engineering. After studying, Rube worked as an engineer for only a couple of months before he quit. He then worked as a newspaper cartoonist, and eventually won important prizes for his political cartoons. But he is most famous for his cartoons of crazy inventions.`,
+      vocab: [
+        {word:'convince', def:'to make someone believe or decide something', hebrew:'לשכנע', arabic:'يُقنع', emoji:'💬',
+         example:'She convinced her parents to let her go to the party.'},
+        {word:'eventually', def:'in the end, after a long time', hebrew:'בסופו של דבר', arabic:'في نهاية المطاف', emoji:'⏳',
+         example:'He practiced every day and eventually became an expert.'},
+        {word:'quit', def:'to stop doing something; to leave a job', hebrew:'לעזוב / להפסיק', arabic:'يترك / يوقف', emoji:'🚪',
+         example:'She quit her job to start her own business.'},
+        {word:'a couple of', def:'two or a small number of', hebrew:'כמה / שניים', arabic:'بضعة', emoji:'✌️',
+         example:'I only need a couple of minutes to finish.'},
+        {word:'creative', def:'having the ability to make new and original things', hebrew:'יצירתי', arabic:'مبدع', emoji:'🎨',
+         example:'She was very creative and always had new ideas.'},
+      ],
+      clozeWords: ['creative','convinced','engineering','couple','quit','eventually','famous','crazy'],
+      clozeText: `As a child, Rube Goldberg loved being [creative] – he especially loved to draw. Rube was allowed to take art lessons even though his father didn't want him to be an artist. Rube's father knew that it was difficult to earn money as an artist. So he [convinced] Rube to study [engineering] since many great artists, like Leonardo da Vinci, had had some training in engineering. After studying, Rube worked as an engineer for only a [couple] of months before he [quit]. He then worked as a newspaper cartoonist, and [eventually] won important prizes for his political cartoons. But he is most [famous] for his cartoons of [crazy] inventions.`,
+      translationHebrew: `כילד, רוב גולדברג אהב להיות יצירתי – הוא אהב במיוחד לצייר. לרוב הורשה לקחת שיעורי אמנות, למרות שאביו לא רצה שיהיה אמן. אביו של רוב ידע שקשה להרוויח כסף כאמן. לכן שכנע את רוב ללמוד הנדסה, מאחר שאמנים גדולים רבים, כמו לאונרדו דה וינצ'י, למדו קצת הנדסה. לאחר לימודיו, עבד רוב כמהנדס רק כמה חודשים לפני שעזב. לאחר מכן עבד כקריקטוריסט בעיתון, ובסופו של דבר זכה בפרסים חשובים על קריקטורות פוליטיות. אך הוא מפורסם ביותר על קריקטורות של המצאות משוגעות.`,
+      comprehension: [
+        {q:"Why did Rube's father convince him to study engineering?",type:'factual',
+         opts:["He didn't enjoy art","It was easier to earn money","His father was an engineer","Engineering was his dream"],ans:1,
+         explain:"The text says Rube's father 'knew that it was difficult to earn money as an artist.'"},
+        {q:"What did Rube Goldberg do AFTER working as an engineer?",type:'factual',
+         opts:["He opened an art school","He went back to university","He became a newspaper cartoonist","He moved to Italy"],ans:2,
+         explain:"The text says 'He then worked as a newspaper cartoonist.'"},
+        {q:"Why might Rube's father have mentioned Leonardo da Vinci?",type:'inference',
+         opts:["Da Vinci was Rube's hero","To show great artists can also study engineering","Da Vinci was Italian","To make Rube feel better"],ans:1,
+         explain:"Da Vinci 'had had some training in engineering' – showing art and engineering can go together."},
+        {q:"Which word BEST describes Rube Goldberg's career?",type:'higher-order',
+         opts:["Boring and predictable","Short and disappointing","Unusual and creative","Simple and lucky"],ans:2,
+         explain:"Engineer → cartoonist → prize winner for crazy cartoons – an unusual, creative journey."},
+      ],
+      miniGameType: 'memory',
+      memoryPairs: [
+        {word:'convince', def:'make someone decide'},
+        {word:'eventually', def:'in the end'},
+        {word:'quit', def:'stop / leave'},
+        {word:'creative', def:'makes new ideas'},
+        {word:'a couple of', def:'two or a few'},
+      ],
+      openEndedQ: "Rube Goldberg had an unusual career path: engineer → cartoonist → prize winner. Do you think his engineering training helped his cartoon inventions? Explain your thinking.",
+      subSections: [
+        {
+          id:'A', label:'🌱 Rube\'s Childhood',
+          text:`As a child, Rube Goldberg loved being creative – he especially loved to draw. Rube was allowed to take art lessons even though his father didn't want him to be an artist. Rube's father knew that it was difficult to earn money as an artist.`,
+          clozeText:`As a child, Rube Goldberg loved being [creative] – he especially loved to draw. Rube was allowed to take art lessons even though his father didn't want him to be an artist. Rube's father knew that it was difficult to earn money as an artist.`,
+          clozeWords:['creative'],
+          clozeWordsL1:['creative'],
+          focusVocab:[4],
+          quickQuestion:{q:"Why do you think Rube's father let him take art lessons if he didn't really want him to be an artist?",opts:["He didn't care about art at all","He wanted to support Rube while steering him toward engineering","He thought art was more important than engineering","He planned to become an art teacher"],ans:1}
+        },
+        {
+          id:'B', label:'⚙️ Engineering & Quitting',
+          text:`So he convinced Rube to study engineering since many great artists, like Leonardo da Vinci, had had some training in engineering. After studying, Rube worked as an engineer for only a couple of months before he quit.`,
+          clozeText:`So he [convinced] Rube to study [engineering] since many great artists, like Leonardo da Vinci, had had some training in engineering. After studying, Rube worked as an engineer for only a [couple] of months before he [quit].`,
+          clozeWords:['convinced','engineering','couple','quit'],
+          clozeWordsL1:['convinced'],
+          focusVocab:[0,3],
+          quickQuestion:{q:"What does it tell us about Rube that he quit engineering after only 'a couple of months'?",opts:["Engineering is too difficult for most people","His true passion was in art and drawing, not engineering","He was fired because he was a bad engineer","He wanted to earn more money in a different job"],ans:1}
+        },
+        {
+          id:'C', label:'🏆 The Famous Cartoonist',
+          text:`He then worked as a newspaper cartoonist, and eventually won important prizes for his political cartoons. But he is most famous for his cartoons of crazy inventions.`,
+          clozeText:`He then worked as a newspaper cartoonist, and [eventually] won important prizes for his political cartoons. But he is most [famous] for his cartoons of [crazy] inventions.`,
+          clozeWords:['eventually','famous','crazy'],
+          clozeWordsL1:['eventually'],
+          focusVocab:[1],
+          quickQuestion:{q:"Rube won prizes for political cartoons, yet is most famous for his silly invention cartoons. What does this suggest about what makes something truly memorable?",opts:["Awards are the only measure of success","What makes people laugh and imagine can outlast formal recognition","Political cartoons are too serious to be popular","Crazy ideas are always better than serious ones"],ans:1}
+        },
+      ],
+    },
+    {
+      id: 2,
+      icon: '🖊️',
+      title: 'His Drawings',
+      subtitle: 'Making Easy Things Difficult',
+      mission: 'Discover how Rube\'s machines worked and why they became famous.',
+      text: `Most inventions are designed to make life easier – to help people do things better and faster. Rube Goldberg, however, created cartoon machines which did the opposite. Instead of making difficult things easy, his silly machines made easy things difficult. Rube Goldberg drew machines that used chain reactions to do a simple task, such as scratching your back, in a complicated way. The machines in his drawings used ordinary objects like wheels, chairs, small balls, gears, pulleys, burning candles and small cars. Some of them also used animals and small people. His drawings of these inventions were so popular that his name is now used as an adjective to describe when something easy is done in a complicated and impractical way. Rube Goldberg never actually built any of his "inventions", but building Rube Goldberg machines has become a popular activity around the world. They are inventions just for fun!`,
+      vocab: [
+        {word:'amusing', def:'funny and entertaining', hebrew:'מצחיק / מבדר', arabic:'مُسلٍّ', emoji:'😄',
+         example:'The clown\'s performance was very amusing.'},
+        {word:'complicated', def:'made of many parts; difficult to understand', hebrew:'מסובך', arabic:'معقد', emoji:'🔧',
+         example:'The instructions were so complicated that nobody understood them.'},
+        {word:'chain reaction', def:'a series of events where each one causes the next', hebrew:'תגובת שרשרת', arabic:'تفاعل متسلسل', emoji:'⛓️',
+         example:'One mistake caused a chain reaction of problems.'},
+        {word:'impractical', def:'not sensible or realistic', hebrew:'לא מעשי', arabic:'غير عملي', emoji:'🙈',
+         example:'Wearing a suit to the beach is impractical.'},
+        {word:'opposite', def:'completely different; the reverse', hebrew:'הפך / מנוגד', arabic:'عكس / مضاد', emoji:'↔️',
+         example:'Hot is the opposite of cold.'},
+      ],
+      clozeWords: ['opposite','chain reactions','complicated','ordinary','popular','adjective','impractical','actually'],
+      clozeText: `Most inventions are designed to make life easier – to help people do things better and faster. Rube Goldberg, however, created cartoon machines which did the [opposite]. Instead of making difficult things easy, his silly machines made easy things difficult. Rube Goldberg drew machines that used [chain reactions] to do a simple task, such as scratching your back, in a [complicated] way. The machines in his drawings used [ordinary] objects like wheels, chairs, small balls, gears, pulleys, burning candles and small cars. Some of them also used animals and small people. His drawings of these inventions were so [popular] that his name is now used as an [adjective] to describe when something easy is done in a complicated and [impractical] way. Rube Goldberg never [actually] built any of his "inventions", but building Rube Goldberg machines has become a popular activity around the world. They are inventions just for fun!`,
+      translationHebrew: `רוב ההמצאות תוכננו להקל על החיים – לעזור לאנשים לעשות דברים טוב יותר ומהר יותר. רוב גולדברג, לעומת זאת, יצר מכונות קריקטורה שעשו את ההפך. במקום להקל על דברים קשים, המכונות המטופשות שלו הפכו דברים קלים לקשים. רוב גולדברג צייר מכונות שהשתמשו בתגובות שרשרת כדי לבצע משימה פשוטה, כמו גירוד הגב, בצורה מסובכת. המכונות בציוריו השתמשו בחפצים רגילים כמו גלגלים, כיסאות, כדורים קטנים, גלגלי שיניים, גלגלות, נרות בוערים ומכוניות קטנות. חלקן גם השתמשו בבעלי חיים ואנשים קטנים. ציוריו של המצאות אלו היו כל כך פופולריים שעכשיו שמו משמש כשם תואר לתאר מצב שבו דבר פשוט נעשה בצורה מסובכת ולא מעשית. רוב גולדברג מעולם לא בנה בפועל את ה"המצאות" שצייר, אבל בניית מכונות רוב גולדברג הפכה לפעילות פופולרית ברחבי העולם. הן המצאות ממש לכיף!`,
+      comprehension: [
+        {q:"What made Rube Goldberg's machines DIFFERENT from typical inventions?",type:'factual',
+         opts:["They were made of metal","They made easy things difficult instead of easier","They were very small","They were only for children"],ans:1,
+         explain:"The text says 'his silly machines made easy things difficult' – the opposite of normal inventions."},
+        {q:"Which objects appeared in Rube's drawings?",type:'factual',
+         opts:["Computers and phones","Rockets and satellites","Wheels, chairs, small balls, gears","Trains and boats"],ans:2,
+         explain:"The text mentions 'wheels, chairs, small balls, gears, pulleys, burning candles and small cars.'"},
+        {q:"Why is Rube Goldberg's name now used as an adjective?",type:'inference',
+         opts:["He was a famous politician","His cartoons perfectly showed unnecessary complexity","He invented a new type of adjective","He won a grammar prize"],ans:1,
+         explain:"His cartoons became so well-known as examples of pointless complexity that people use his name to describe it."},
+        {q:"Rube never built his machines. Does this make him less of an inventor?",type:'higher-order',
+         opts:["Yes – inventors must build things","No – his ideas inspired a worldwide activity","Yes – his machines were impractical","No – drawing is better than building"],ans:1,
+         explain:"Though he never built them, his ideas inspired millions worldwide – showing creative ideas have real power."},
+      ],
+      miniGameType: 'catcher',
+      catcherRounds: [
+        {def:'Completely different; the reverse',correct:'opposite',distractors:['popular','ordinary','actually']},
+        {def:'Not sensible or realistic',correct:'impractical',distractors:['creative','famous','ordinary']},
+        {def:'Funny and entertaining',correct:'amusing',distractors:['popular','opposite','crazy']},
+        {def:'Made of many parts; hard to understand',correct:'complicated',distractors:['ordinary','impractical','popular']},
+        {def:'Normal, not special',correct:'ordinary',distractors:['creative','amusing','famous']},
+      ],
+      openEndedQ: "Rube Goldberg never actually built his machines – he only drew them. Do you think a drawing of an invention counts as a real invention? Use evidence from the text to support your answer.",
+      subSections: [
+        {
+          id:'A', label:'↔️ The Opposite Idea',
+          text:`Most inventions are designed to make life easier – to help people do things better and faster. Rube Goldberg, however, created cartoon machines which did the opposite. Instead of making difficult things easy, his silly machines made easy things difficult.`,
+          clozeText:`Most inventions are designed to make life easier – to help people do things better and faster. Rube Goldberg, however, created cartoon machines which did the [opposite]. Instead of making difficult things easy, his silly machines made easy things difficult.`,
+          clozeWords:['opposite'],
+          clozeWordsL1:['opposite'],
+          focusVocab:[4],
+          quickQuestion:{q:"Why is making 'easy things difficult' funny rather than just frustrating or annoying?",opts:["Because it is accidental and nobody planned it","Because it is done deliberately as a joke – the absurdity is the whole point","Because it always saves time in the end","Because difficult things are more valuable"],ans:1}
+        },
+        {
+          id:'B', label:'⛓️ Chain Reactions & Objects',
+          text:`Rube Goldberg drew machines that used chain reactions to do a simple task, such as scratching your back, in a complicated way. The machines in his drawings used ordinary objects like wheels, chairs, small balls, gears, pulleys, burning candles and small cars. Some of them also used animals and small people.`,
+          clozeText:`Rube Goldberg drew machines that used [chain reactions] to do a simple task, such as scratching your back, in a [complicated] way. The machines in his drawings used [ordinary] objects like wheels, chairs, small balls, gears, pulleys, burning candles and small cars. Some of them also used animals and small people.`,
+          clozeWords:['chain reactions','complicated','ordinary'],
+          clozeWordsL1:['chain reactions'],
+          focusVocab:[1,2],
+          quickQuestion:{q:"Why do you think Rube used 'ordinary objects' like wheels, balls, and chairs rather than special machinery?",opts:["Special machines were too expensive to draw","Using everyday objects makes the machines relatable and the humour more universal","Ordinary objects work faster than special machines","He simply didn't know about advanced technology"],ans:1}
+        },
+        {
+          id:'C', label:'🌍 His Global Legacy',
+          text:`His drawings of these inventions were so popular that his name is now used as an adjective to describe when something easy is done in a complicated and impractical way. Rube Goldberg never actually built any of his "inventions", but building Rube Goldberg machines has become a popular activity around the world. They are inventions just for fun!`,
+          clozeText:`His drawings of these inventions were so [popular] that his name is now used as an [adjective] to describe when something easy is done in a complicated and [impractical] way. Rube Goldberg never [actually] built any of his "inventions", but building Rube Goldberg machines has become a popular activity around the world. They are inventions just for fun!`,
+          clozeWords:['popular','adjective','impractical','actually'],
+          clozeWordsL1:['popular'],
+          focusVocab:[0,3],
+          quickQuestion:{q:"Rube Goldberg NEVER built his machines, yet building them became a worldwide activity. What does this tell us about the power of creative ideas?",opts:["Ideas can only have impact when they are built","A powerful creative idea can inspire real-world action even if the creator never acts on it","Only famous people can inspire others","Cartoons are always more powerful than real machines"],ans:1}
+        },
+      ],
+    },
+    {
+      id: 3,
+      icon: '🏆',
+      title: 'Part 3: The Contest',
+      subtitle: 'Teamwork & Crazy Machines',
+      mission: 'Find out how students compete using Rube Goldberg\'s ideas today.',
+      text: `The Rube Goldberg Machine Contest was started in 1949 at Purdue University in Indiana, USA. There have been contests every year since 1987. Originally only for college students, the contest now includes competitions for high school students (ages 14-18) and for middle school students (ages 11-14). The contest encourages teamwork and thinking "out of the box" to solve problems. Tasks that were given in past contests have included putting toothpaste on a toothbrush, sharpening a pencil, squeezing juice from an orange and watering a plant.\n\nUnlike in Rube's drawings, the contest today does not allow the use of animals, people or candle flames. The teams have to use everyday objects to create their machines, and the use of recycled items is encouraged. The chain reaction must have a minimum of 20 steps (10 for middle school students). The maximum number of steps for the 2015 contest is 75!\n\nBelieve it or not, there is even a category in the Guinness Book of Records for the Rube Goldberg machine with the most steps. The last record was set in 2012. That machine, designed by students from Purdue, used 300 steps to inflate and then pop a balloon. A 14-person team spent about 5,000 hours, spread over six months, designing and building this machine. That's about as crazy as it gets!`,
+      vocab: [
+        {word:'contest', def:'a competition', hebrew:'תחרות', arabic:'مسابقة', emoji:'🏆',
+         example:'She entered a baking contest and won first place.'},
+        {word:'teamwork', def:'working together as a group to achieve something', hebrew:'עבודת צוות', arabic:'العمل الجماعي', emoji:'🤝',
+         example:'The project was finished quickly thanks to great teamwork.'},
+        {word:'out of the box', def:'thinking in a creative, unusual, original way', hebrew:'חשיבה מחוץ לקופסא', arabic:'التفكير خارج الصندوق', emoji:'💡',
+         example:'We need to think out of the box to solve this problem.'},
+        {word:'maximum', def:'the largest or highest possible amount or number', hebrew:'מקסימום', arabic:'الحد الأقصى', emoji:'⬆️',
+         example:'The maximum number of players on a football team is 11.'},
+        {word:'minimum', def:'the smallest or lowest possible amount or number', hebrew:'מינימום', arabic:'الحد الأدنى', emoji:'⬇️',
+         example:'You need a minimum of 5 people to play this game.'},
+        {word:'unlike', def:'different from; in contrast to', hebrew:'בניגוד ל / שלא כמו', arabic:'على عكس', emoji:'≠',
+         example:'Unlike her sister, Maya loves math.'},
+      ],
+      clozeWords: ['teamwork','originally','recycled','minimum','maximum','unlike','inflate','encourages'],
+      clozeText: `The Rube Goldberg Machine Contest was started in 1949 at Purdue University in Indiana, USA. There have been contests every year since 1987. [Originally] only for college students, the contest now includes competitions for high school students. The contest [encourages] [teamwork] and thinking "out of the box" to solve problems.\n\n[Unlike] in Rube's drawings, the contest today does not allow the use of animals, people or candle flames. The teams have to use everyday objects to create their machines, and the use of [recycled] items is encouraged. The chain reaction must have a [minimum] of 20 steps. The [maximum] number of steps for the 2015 contest is 75!\n\nThe last Guinness record was set in 2012. That machine used 300 steps to [inflate] and then pop a balloon.`,
+      translationHebrew: `תחרות מכונת רוב גולדברג הוקמה בשנת 1949 באוניברסיטת פרדו באינדיאנה, ארה"ב. יש תחרויות כל שנה מאז 1987. במקור רק לסטודנטים, התחרות כוללת כעת גם תחרויות לתלמידי תיכון (גילאי 14-18) ולתלמידי חטיבת ביניים (גילאי 11-14). התחרות מעודדת עבודת צוות וחשיבה "מחוץ לקופסא" לפתרון בעיות.\n\nבניגוד לציורים של רוב, התחרות של היום אינה מאפשרת שימוש בבעלי חיים, אנשים או להבות נרות. הצוותים חייבים להשתמש בחפצים יומיומיים, והשימוש בחומרים ממוחזרים מעודד. תגובת השרשרת חייבת לכלול לפחות 20 שלבים. מספר השלבים המרבי לתחרות 2015 הוא 75!\n\nהשיא האחרון בגינס נקבע ב-2012. המכונה, שתוכננה על ידי סטודנטים מפרדו, השתמשה ב-300 שלבים כדי לנפח ואז להפוץ בלון. צוות של 14 אנשים בילה כ-5,000 שעות על פני שישה חודשים בתכנון ובניית המכונה הזו.`,
+      comprehension: [
+        {q:"The Rube Goldberg Contest takes place every year since...",type:'factual',
+         opts:["1949","1987","2012","2015"],ans:1,
+         explain:"'There have been contests every year since 1987.'"},
+        {q:"Which statement about the contest is FALSE?",type:'factual',
+         opts:["Teams must use everyday objects","Students can use animals in their machines","The use of recycled items is encouraged","High school students need at least 20 steps"],ans:1,
+         explain:"The text says it 'does not allow the use of animals, people or candle flames.'"},
+        {q:"Why do you think the contest encourages recycled items?",type:'higher-order',
+         opts:["Recycled items are required by law","It promotes creativity and environmental awareness","New items break too easily","Recycled items look better"],ans:1,
+         explain:"Using recycled materials promotes creative problem-solving and environmental responsibility – true 'out of the box' thinking."},
+        {q:"What does the 5,000-hour record machine tell us about the contest?",type:'higher-order',
+         opts:["The contest is simple to win","Students don't need to work hard","It can inspire extraordinary teamwork and dedication","Only professional engineers can compete"],ans:2,
+         explain:"5,000 hours over 6 months by a 14-person team shows incredible dedication – exactly the teamwork the contest promotes."},
+      ],
+      miniGameType: 'speedquiz',
+      speedQuizItems: [
+        {stmt:"The Rube Goldberg Contest was started in 1987.",ans:false,explain:"It started in 1949 – annual contests began in 1987."},
+        {stmt:"The contest is only for college students.",ans:false,explain:"It now includes high school AND middle school students."},
+        {stmt:"Teams must use everyday objects in their machines.",ans:true,explain:"Yes – 'teams have to use everyday objects.'"},
+        {stmt:"Animals are allowed in the contest.",ans:false,explain:"The contest 'does not allow the use of animals.'"},
+        {stmt:"The minimum steps for high school is 20.",ans:true,explain:"Yes – 'a minimum of 20 steps (10 for middle school).'"},
+        {stmt:"The maximum steps in 2015 was 75.",ans:true,explain:"Yes – 'The maximum number of steps for the 2015 contest is 75!'"},
+        {stmt:"The Guinness record machine used 300 steps.",ans:true,explain:"Yes – 'used 300 steps to inflate and then pop a balloon.'"},
+        {stmt:"The record machine was designed by professional engineers.",ans:false,explain:"It was 'designed by students from Purdue.'"},
+      ],
+      openEndedQ: "The Guinness record machine took a 14-person team 5,000 hours to build – just to pop a balloon. Do you think this is a worthwhile use of time? What skills does a project like this build? Give at least two specific reasons.",
+      subSections: [
+        {
+          id:'A', label:'🏫 History of the Contest',
+          text:`The Rube Goldberg Machine Contest was started in 1949 at Purdue University in Indiana, USA. There have been contests every year since 1987. Originally only for college students, the contest now includes competitions for high school students (ages 14-18) and for middle school students (ages 11-14).`,
+          clozeText:`The Rube Goldberg Machine Contest was started in 1949 at Purdue University in Indiana, USA. There have been contests every year since 1987. [Originally] only for college students, the contest now includes competitions for high school students (ages 14-18) and for middle school students (ages 11-14).`,
+          clozeWords:['Originally'],
+          clozeWordsL1:['Originally'],
+          focusVocab:[0],
+          quickQuestion:{q:"Why do you think the contest was originally only for college students but was later opened to younger students too?",opts:["College students refused to compete anymore","The values of creativity and teamwork are beneficial at all ages","Younger students are better at building machines","High school students have more free time for contests"],ans:1}
+        },
+        {
+          id:'B', label:'🤝 Teamwork & Tasks',
+          text:`The contest encourages teamwork and thinking "out of the box" to solve problems. Tasks that were given in past contests have included putting toothpaste on a toothbrush, sharpening a pencil, squeezing juice from an orange and watering a plant.`,
+          clozeText:`The contest [encourages] [teamwork] and thinking "out of the box" to solve problems. Tasks that were given in past contests have included putting toothpaste on a toothbrush, sharpening a pencil, squeezing juice from an orange and watering a plant.`,
+          clozeWords:['encourages','teamwork'],
+          clozeWordsL1:['teamwork'],
+          focusVocab:[1,2],
+          quickQuestion:{q:"The contest tasks are all very simple (toothpaste on a brush, sharpening a pencil). Why would anyone build a complex Rube Goldberg machine to do them?",opts:["Simple tools are too slow for these tasks","To demonstrate creativity and engineering thinking in a fun, challenging way","Complex machines are always more efficient","Simple tasks require complex solutions"],ans:1}
+        },
+        {
+          id:'C', label:'📏 Rules & Limits',
+          text:`Unlike in Rube's drawings, the contest today does not allow the use of animals, people or candle flames. The teams have to use everyday objects to create their machines, and the use of recycled items is encouraged. The chain reaction must have a minimum of 20 steps (10 for middle school students). The maximum number of steps for the 2015 contest is 75!`,
+          clozeText:`[Unlike] in Rube's drawings, the contest today does not allow the use of animals, people or candle flames. The teams have to use everyday objects to create their machines, and the use of [recycled] items is encouraged. The chain reaction must have a [minimum] of 20 steps. The [maximum] number of steps for the 2015 contest is 75!`,
+          clozeWords:['Unlike','recycled','minimum','maximum'],
+          clozeWordsL1:['minimum'],
+          focusVocab:[3,4,5],
+          quickQuestion:{q:"The contest bans animals and candle flames, even though Rube's original drawings included them. What is the most likely reason for this rule?",opts:["Animals and flames are not visually interesting","Safety and ethical responsibility – real contests must protect living things and prevent accidents","Using animals would make the machines too complicated","Candle flames are too difficult to draw in a blueprint"],ans:1}
+        },
+        {
+          id:'D', label:'🌟 The Guinness Record',
+          text:`Believe it or not, there is even a category in the Guinness Book of Records for the Rube Goldberg machine with the most steps. The last record was set in 2012. That machine, designed by students from Purdue, used 300 steps to inflate and then pop a balloon. A 14-person team spent about 5,000 hours, spread over six months, designing and building this machine. That's about as crazy as it gets!`,
+          clozeText:`The last Guinness record was set in 2012. That machine, designed by students from Purdue, used 300 steps to [inflate] and then pop a balloon. A 14-person team spent about 5,000 hours – spread over six months – designing and building this machine.`,
+          clozeWords:['inflate'],
+          clozeWordsL1:['inflate'],
+          focusVocab:[3],
+          quickQuestion:{q:"A 14-person team spent 5,000 hours building a machine that ultimately just pops a balloon. What does this extraordinary effort reveal about the spirit of the contest?",opts:["The contest is a waste of time and resources","The challenge itself – the process of design, teamwork, and problem-solving – is the real reward","Popping balloons requires very advanced engineering","Only professional engineers can achieve such results"],ans:1}
+        },
+      ],
+    }
+  ]
+};
+
+// ═══════════════════════════════════════════════
+//  S T A T E
+// ═══════════════════════════════════════════════
+let state = {
+  screen: 'welcome',
+  name: '',
+  level: 0,
+  currentSection: 1,
+  currentActivity: 0,
+  totalScore: 0,
+  actScore: {},      // { "s1a0": 10, "s1a2": 8, ... }
+  penalties: 0,
+  unlockedSections: [1],
+  completedActivities: {1:[],2:[],3:[]},
+  recordingSection: null,
+  recordingBlob: null,
+  clozeMode: 'easy',
+  selectedVocabWord: null,
+  selectedVocabDef: null,
+  memoryState: null,
+  catcherState: null,
+  quizState: null,
+  audioWords: [],
+  audioCurrentWord: -1,
+  audioPlaying: false,
+  audioUtterance: null,
+  audioProgress: 0,
+  recordingStream: null,
+  mediaRecorder: null,
+  bonusTask: {task:'',steps:'',objects:''},
+  hasSavedProgress: false,
+  recordingPlayed: false,
+  recordingBlobBase64: '',
+  resultsImageDataUrl: '',
+  teacherPhone: '',
+  subSteps: {},
+  recordingStartTime: 0,
+  translationAttempt: '',
+  translationAttempts: {},
+  reflections: {},
+  audioStarted: {},
+  listenAgainStarted: {},
+  openEndedResponses: {},
+  audioSufficient: {},
+  listenAgainSufficient: {}
+};
+
+// ═══════════════════════════════════════════════
+//  U T I L I T I E S
+// ═══════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const shuffle = arr => [...arr].sort(() => Math.random() - .5);
+function flash(msg, type='good'){
+  const d = document.createElement('div');
+  d.className = `flash flash-${type}`;
+  d.textContent = msg;
+  document.body.appendChild(d);
+  setTimeout(() => d.remove(), 2100);
+}
+function getScore(sid, aid){ return state.actScore[`s${sid}a${aid}`] || 0; }
+function setScore(sid, aid, pts){
+  const key = `s${sid}a${aid}`;
+  state.actScore[key] = Math.max(0, pts);
+  // recalc total
+  state.totalScore = Object.values(state.actScore).reduce((a,b)=>a+b,0);
+}
+function markComplete(sid, aid){
+  if(!state.completedActivities[sid].includes(aid))
+    state.completedActivities[sid].push(aid);
+}
+function isComplete(sid, aid){ return state.completedActivities[sid].includes(aid); }
+function canUnlockNext(sid){
+  return REQUIRED_ACTS.every(a => activityFullyDone(sid, a));
+}
+function sectionScore(sid){
+  const keys = [1,3,4,5];
+  return keys.reduce((s,a) => s + getScore(sid,a), 0);
+}
+function finalPercent(){
+  // Score-based: total points earned / 120 max
+  return Math.min(100, Math.round(state.totalScore / 120 * 100));
+}
+function sectionPct(sid){
+  return Math.min(100, Math.round(sectionScore(sid) / 40 * 100));
+}
+function levelName(){ return ['','🟢 Support','🟡 Standard','🔴 Challenge'][state.level]; }
+function lvl(){ return state.level; }
+function showHebrew(){ return lvl() === 1; }
+function sid(){ return state.currentSection; }
+function sec(){ return DATA.sections[sid()-1]; }
+function aid(){ return state.currentActivity; }
+
+function bi(en, he){ return lvl()===1 ? `${en}<div dir="rtl" style="margin-top:6px;color:#d8cfbf;font-size:.88rem">${he}</div>` : en; }
+function countWords(text){
+  return text.trim().split(/\s+/).filter(function(w){ return w.length > 0; }).length;
+}
+// Returns true if text meets minimum effort: minWords words OR minChars characters
+function isSubstantialText(text, minWords, minChars){
+  var t = (text||'').trim();
+  return t.length >= minChars || countWords(t) >= minWords;
+}
+function sectionCompletionPercent(sectionId){
+  const required = REQUIRED_ACTS.length;
+  let done = 0;
+  REQUIRED_ACTS.forEach(a=>{ if(activityFullyDone(sectionId,a)) done++; });
+  return Math.round((done/required)*100);
+}
+function overallCompletionPercent(){
+  const total = DATA.sections.length * REQUIRED_ACTS.length;
+  let done = 0;
+  DATA.sections.forEach(s=> REQUIRED_ACTS.forEach(a=>{ if(activityFullyDone(s.id,a)) done++; }));
+  return Math.round((done/total)*100);
+}
+function sectionKey(prefix, sectionId=null){ return `${prefix}_${sectionId||sid()}`; }
+function getTranslationAttempt(sectionId=null){ return (state.translationAttempts[sectionKey('translation', sectionId)] || ''); }
+function setTranslationAttempt(val, sectionId=null){ state.translationAttempts[sectionKey('translation', sectionId)] = val; saveProgress(); }
+function getReflection(sectionId=null){ return (state.reflections[sectionKey('reflection', sectionId)] || ''); }
+function setReflection(val, sectionId=null){ state.reflections[sectionKey('reflection', sectionId)] = val; saveProgress(); }
+function setOpenEndedResponse(val, sectionId=null){ state.openEndedResponses[sectionKey('open', sectionId)] = val; saveProgress(); }
+function getOpenEndedResponse(sectionId=null){ return (state.openEndedResponses[sectionKey('open', sectionId)] || ''); }
+function markAudioStarted(kind, sectionId=null){
+  const key = sectionKey(kind, sectionId) + '_' + (kind==='audioStarted' ? getSubStep('audio') : 'full');
+  if(kind==='audioStarted') state.audioStarted[key]=true;
+  else state.listenAgainStarted[key]=true;
+  saveProgress();
+}
+function hasAudioStarted(kind, sectionId=null){
+  const key = sectionKey(kind, sectionId) + '_' + (kind==='audioStarted' ? getSubStep('audio') : 'full');
+  return kind==='audioStarted' ? !!state.audioStarted[key] : !!state.listenAgainStarted[key];
+}
+
+// ── Audio sufficiency tracking ────────────────────────
+// Minimum seconds of playback before "listened" counts as meaningful
+var AUDIO_MIN_PLAY_SECS = 7;
+var _audioSufficientTimer = null;
+var _audioSufficientCalled = false;
+function _audSuffKey(isListenAgain){
+  var step = isListenAgain ? 'full' : getSubStep('audio');
+  return sid() + '_' + (isListenAgain ? 'laS' : 'audS') + '_' + step;
+}
+function markAudioSufficient(isListenAgain){
+  var k = _audSuffKey(isListenAgain);
+  if(isListenAgain){ state.listenAgainSufficient = state.listenAgainSufficient||{}; state.listenAgainSufficient[k]=true; }
+  else { state.audioSufficient = state.audioSufficient||{}; state.audioSufficient[k]=true; }
+  saveProgress();
+}
+function hasAudioSufficient(isListenAgain){
+  var k = _audSuffKey(isListenAgain);
+  if(isListenAgain) return !!(state.listenAgainSufficient && state.listenAgainSufficient[k]);
+  return !!(state.audioSufficient && state.audioSufficient[k]);
+}
+
+// ── Sub-step helpers ──────────────────────────────
+function getSubStep(type){ return (state.subSteps[sid()+'_'+type] || 0); }
+function setSubStep(type, n){ state.subSteps[sid()+'_'+type] = n; saveProgress(); }
+function resetSubStep(type){ state.subSteps[sid()+'_'+type] = 0; }
+const SUBSTEP_ACTIVITY_MAP = {1:'vocab',2:'audio',3:'cloze',5:'comp'};
+function activitySubKey(activityId){ return SUBSTEP_ACTIVITY_MAP[activityId] || null; }
+function hasSubsectionsForActivity(activityId, sectionObj=null){
+  const s = sectionObj || sec();
+  if(activityId===1 && lvl()>1) return false;
+  return !!(s && s.subSections && s.subSections.length && activitySubKey(activityId));
+}
+function activityFullyDone(sectionId, activityId){
+  if(!(state.completedActivities[sectionId]||[]).includes(activityId)) return false;
+  const s = DATA.sections[sectionId-1];
+  if(hasSubsectionsForActivity(activityId, s)) {
+    const key = sectionId + '_' + activitySubKey(activityId);
+    return (state.subSteps[key] || 0) >= (s.subSections.length - 1);
+  }
+  return true;
+}
+function canOpenActivity(sectionId, activityId){
+  if(!state.unlockedSections.includes(sectionId)) return false;
+  for(let i=0;i<activityId;i++){
+    if(REQUIRED_ACTS.includes(i) && !activityFullyDone(sectionId, i)) return false;
+  }
+  return true;
+}
+function currentSubsectionFor(activityId){
+  const s = sec();
+  if(!hasSubsectionsForActivity(activityId, s)) return null;
+  const idx = Math.min(getSubStep(activitySubKey(activityId)), s.subSections.length-1);
+  return {idx, sub:s.subSections[idx], total:s.subSections.length};
+}
+function progressSubActivity(activityId, points=0){
+  const key = activitySubKey(activityId);
+  const s = sec();
+  if(!hasSubsectionsForActivity(activityId, s)){
+    completeActivity(sid(), activityId, points);
+    return;
+  }
+  const idx = getSubStep(key);
+  const total = s.subSections.length;
+  if(points > 0){
+    const increment = Math.max(1, Math.round(points / total));
+    setScore(sid(), activityId, Math.min(10, getScore(sid(), activityId) + increment));
+  }
+  if(idx < total - 1){
+    setSubStep(key, idx + 1);
+    const ac = $('actContent');
+    if(ac){ ac.innerHTML = renderActivityContent(); setTimeout(initActivity, 30); }
+    // Also update the subtitle so the sub-label badge stays current
+    const subtitleEl = document.querySelector('.act-subtitle');
+    if(subtitleEl){
+      const a = aid(), s = sec();
+      const info2 = currentSubsectionFor(a);
+      subtitleEl.innerHTML = `${s.subtitle} &nbsp;|&nbsp; Level: ${levelName()}${info2?' &nbsp;|&nbsp; '+info2.sub.label:''}`;
+    }
+    flash('✓ Part complete. Moving to the next part.','good');
+  } else {
+    markComplete(sid(), activityId);
+    const btn = $('nextBtn'); if(btn) btn.disabled = false;
+    if(canUnlockNext(sid())){
+      const nxt = sid() + 1;
+      if(nxt <= DATA.sections.length && !state.unlockedSections.includes(nxt)) state.unlockedSections.push(nxt);
+    }
+    saveProgress();
+    flash('✓ Activity complete!','good');
+  }
+}
+function subsectionHeader(activityId){
+  const info = currentSubsectionFor(activityId);
+  if(!info) return '';
+  return `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;padding:10px 12px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid var(--border)">
+      <div style="display:flex;gap:5px;align-items:center">
+        ${sec().subSections.map((ss,i)=>`<div title="${ss.label}" style="min-width:22px;height:6px;border-radius:99px;background:${i<info.idx?'var(--success)':i===info.idx?'var(--brass)':'rgba(255,255,255,.12)'};transition:background .35s;cursor:default"></div>`).join('')}
+      </div>
+      <span style="font-size:.78rem;font-family:var(--font-head);color:${info.idx===info.total-1?'var(--success)':'var(--brass)'}">
+        ${info.sub.label} &nbsp;<span style="color:var(--dim);font-size:.7rem">${info.idx+1}&thinsp;/&thinsp;${info.total}</span>
+      </span>
+    </div>`;
+}
+
+const ACT_NAMES = ['📖 Intro','🧩 Vocab','🎧 Listen & Read','📝 Fill in Blanks','🎮 Mini Game','❓ Comprehension','🔁 Listen Again','🌍 Translate','🎤 Record'];
+const ACT_SHORT = ['Intro','Vocab','Audio','Cloze','Game','Comprehension','Listen','Translate','Record'];
+const REQUIRED_ACTS = [0,1,2,3,4,5,6,7]; // intro, vocab, audio, cloze, game, comprehension, listen again + reflection, translation
+
+// ═══════════════════════════════════════════════
+//  S A V E   &   R E S U M E
+// ═══════════════════════════════════════════════
+const STORAGE_KEY = 'rube_goldberg_assignment_progress_v2';
+
+function serializableState(){
+  return {
+    screen: state.screen,
+    name: state.name,
+    level: state.level,
+    currentSection: state.currentSection,
+    currentActivity: state.currentActivity,
+    totalScore: state.totalScore,
+    actScore: state.actScore,
+    penalties: state.penalties,
+    unlockedSections: state.unlockedSections,
+    completedActivities: state.completedActivities,
+    recordingSection: state.recordingSection,
+    recordingPlayed: state.recordingPlayed,
+    recordingBlobBase64: state.recordingBlobBase64 || '',
+    clozeMode: state.clozeMode,
+    bonusTask: state.bonusTask,
+    teacherPhone: state.teacherPhone || '',
+    subSteps: state.subSteps || {},
+    translationAttempt: state.translationAttempt || '',
+    translationAttempts: state.translationAttempts || {},
+    reflections: state.reflections || {},
+    audioStarted: state.audioStarted || {},
+    listenAgainStarted: state.listenAgainStarted || {},
+    openEndedResponses: state.openEndedResponses || {},
+    audioSufficient: state.audioSufficient || {},
+    listenAgainSufficient: state.listenAgainSufficient || {}
+  };
+}
+
+function saveProgress(){
+  try {
+    state.resultsImageDataUrl = '';
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(serializableState()));
+    state.hasSavedProgress = true;
+  } catch (e) {
+    console.warn('Could not save progress', e);
+  }
+}
+
+function base64ToBlob(base64, mime='audio/webm'){
+  if(!base64) return null;
+  const byteChars = atob(base64.split(',').pop());
+  const byteNumbers = new Array(byteChars.length);
+  for(let i=0;i<byteChars.length;i++) byteNumbers[i] = byteChars.charCodeAt(i);
+  return new Blob([new Uint8Array(byteNumbers)], {type:mime});
+}
+
+function blobToBase64(blob){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onloadend = ()=>resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+function hasSavedProgress(){
+  try { return !!localStorage.getItem(STORAGE_KEY); } catch(e){ return false; }
+}
+
+function loadProgress(){
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return false;
+    const saved = JSON.parse(raw);
+    Object.assign(state, saved);
+    if(saved.recordingBlobBase64){
+      state.recordingBlob = base64ToBlob(saved.recordingBlobBase64);
+    }
+    state.hasSavedProgress = true;
+    return true;
+  } catch (e) {
+    console.warn('Could not load progress', e);
+    return false;
+  }
+}
+
+function clearProgress(){
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+  state.hasSavedProgress = false;
+}
+
+function newGame(){
+  clearProgress();
+  stopSpeech();
+  state = {
+    screen: 'welcome',
+    name: '',
+    level: 0,
+    currentSection: 1,
+    currentActivity: 0,
+    totalScore: 0,
+    actScore: {},
+    penalties: 0,
+    unlockedSections: [1],
+    completedActivities: {1:[],2:[],3:[]},
+    recordingSection: null,
+    recordingBlob: null,
+    clozeMode: 'easy',
+    selectedVocabWord: null,
+    selectedVocabDef: null,
+    memoryState: null,
+    catcherState: null,
+    quizState: null,
+    audioWords: [],
+    audioCurrentWord: -1,
+    audioPlaying: false,
+    audioUtterance: null,
+    audioProgress: 0,
+    recordingStream: null,
+    mediaRecorder: null,
+    bonusTask: {task:'',steps:'',objects:''},
+    hasSavedProgress: false,
+    recordingPlayed: false,
+    recordingBlobBase64: '',
+    resultsImageDataUrl: '',
+    teacherPhone: '',
+    subSteps: {},
+    recordingStartTime: 0,
+    translationAttempt: '',
+    translationAttempts: {},
+    reflections: {},
+    audioStarted: {},
+    listenAgainStarted: {},
+    openEndedResponses: {},
+    audioSufficient: {},
+    listenAgainSufficient: {}
+  };
+  render();
+}
+
+// ═══════════════════════════════════════════════
+//  A U D I O   E N G I N E
+// ═══════════════════════════════════════════════
+let ttsActive = false;
+
+// ─── Voice selection ──────────────────────────────────────
+function getBestVoice(){
+  const voices = speechSynthesis.getVoices();
+  // Prefer clear English voices; fall back to any English
+  const want = ['Google US English','Microsoft Aria','Samantha','Karen','Daniel','Alex'];
+  for(const name of want){
+    const v = voices.find(v => v.name.includes(name));
+    if(v) return v;
+  }
+  return voices.find(v => v.lang && v.lang.startsWith('en')) || voices[0] || null;
+}
+
+// ─── Core TTS – simple play/stop, no word tracking ────────
+function speakText(text, _unusedSpans, onEnd, onActualStart, onSufficient){
+  speechSynthesis.cancel();
+  ttsActive = true;
+  // Clear any previous sufficiency timer
+  if(_audioSufficientTimer){ clearTimeout(_audioSufficientTimer); _audioSufficientTimer=null; }
+  _audioSufficientCalled = false;
+
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.rate  = typeof audioSpeed !== 'undefined' ? audioSpeed : 0.9;
+  utt.pitch = 1.0;
+  utt.volume = 1.0;
+
+  // Try to pick a good voice; voices may be empty first call on mobile
+  const voice = getBestVoice();
+  if(voice) utt.voice = voice;
+
+  utt.onstart = () => {
+    const btn = $('audioPlayBtn');
+    if(btn){ btn.classList.add('playing'); btn.textContent = '⏸'; }
+    const st = $('audioStatus'); if(st) st.textContent = 'Playing…';
+    // Mark as actually started only when TTS confirms playback began
+    if(typeof onActualStart === 'function') onActualStart();
+    // Start sufficiency timer – fires after AUDIO_MIN_PLAY_SECS of continuous playback
+    _audioSufficientCalled = false;
+    if(_audioSufficientTimer){ clearTimeout(_audioSufficientTimer); _audioSufficientTimer=null; }
+    _audioSufficientTimer = setTimeout(function(){
+      _audioSufficientCalled = true;
+      _audioSufficientTimer = null;
+      if(typeof onSufficient === 'function') onSufficient();
+    }, AUDIO_MIN_PLAY_SECS * 1000);
+  };
+
+  utt.onend = () => {
+    ttsActive = false;
+    const btn = $('audioPlayBtn');
+    if(btn){ btn.classList.remove('playing'); btn.textContent = '▶'; }
+    const st = $('audioStatus'); if(st) st.textContent = 'Done – press ▶ to replay';
+    // Natural end always counts as sufficient – clear timer and call callback if not yet called
+    if(_audioSufficientTimer){ clearTimeout(_audioSufficientTimer); _audioSufficientTimer=null; }
+    if(!_audioSufficientCalled && typeof onSufficient === 'function'){
+      _audioSufficientCalled = true;
+      onSufficient();
+    }
+    if(typeof onEnd === 'function') onEnd();
+  };
+
+  utt.onerror = (e) => {
+    // Interrupted = user stopped early; clear timer so it doesn't fire after the fact
+    if(e.error === 'interrupted'){
+      if(_audioSufficientTimer){ clearTimeout(_audioSufficientTimer); _audioSufficientTimer=null; }
+      return;
+    }
+    ttsActive = false;
+    const btn = $('audioPlayBtn');
+    if(btn){ btn.classList.remove('playing'); btn.textContent = '▶'; }
+    const st = $('audioStatus'); if(st) st.textContent = 'Audio unavailable on this device';
+  };
+
+  state.audioUtterance = utt;
+  // Small delay after cancel() prevents "interrupted" errors on Chrome Android
+  setTimeout(() => {
+    if(ttsActive) speechSynthesis.speak(utt);
+  }, 60);
+}
+
+function stopSpeech(){
+  ttsActive = false;
+  // Clear the sufficiency timer so partial listening doesn't auto-qualify later
+  if(typeof _audioSufficientTimer !== 'undefined' && _audioSufficientTimer){
+    clearTimeout(_audioSufficientTimer); _audioSufficientTimer=null;
+  }
+  speechSynthesis.cancel();
+  const btn = $('audioPlayBtn');
+  if(btn){ btn.classList.remove('playing'); btn.textContent = '▶'; }
+  const st = $('audioStatus'); if(st) st.textContent = 'Stopped';
+}
+
+function updateAudioUI(){ /* no-op – slider removed */ }
+
+// ═══════════════════════════════════════════════
+//  R E C O R D I N G
+// ═══════════════════════════════════════════════
+async function startRecording(){
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    state.recordingStream = stream;
+    const mr = new MediaRecorder(stream);
+    state.mediaRecorder = mr;
+    const chunks = [];
+    mr.ondataavailable = e => chunks.push(e.data);
+    mr.onstop = async () => {
+      state.recordingBlob = new Blob(chunks, {type:'audio/webm'});
+      state.recordingSection = sid();
+      state.recordingPlayed = false;
+      state.recordingBlobBase64 = await blobToBase64(state.recordingBlob);
+      saveProgress();
+      renderRecordingPlayback();
+    };
+    state.recordingStartTime = Date.now();
+    mr.start();
+    $('recStatus').textContent = '🔴 Recording...';
+    $('recBtn').className = 'rec-btn rec-btn-stop';
+    $('recBtn').textContent = '⏹';
+    $('recBtn').onclick = stopRecording;
+  } catch(e){
+    flash('Microphone not available','bad');
+  }
+}
+
+function stopRecording(){
+  const elapsed = Date.now() - (state.recordingStartTime || Date.now());
+  if(elapsed < 2500){
+    if(state.mediaRecorder && state.mediaRecorder.state !== 'inactive'){
+      state.mediaRecorder.ondataavailable = null;
+      state.mediaRecorder.onstop = null;
+      state.mediaRecorder.stop();
+      if(state.recordingStream) state.recordingStream.getTracks().forEach(t => t.stop());
+    }
+    state.recordingBlob = null;
+    state.recordingBlobBase64 = '';
+    $('recStatus').textContent = '⚠️ Please record at least 3 seconds.';
+    $('recBtn').className = 'rec-btn rec-btn-start';
+    $('recBtn').textContent = '🎤';
+    $('recBtn').onclick = startRecording;
+    flash('Please record for at least 3 seconds','bad');
+    return;
+  }
+  if(state.mediaRecorder && state.mediaRecorder.state !== 'inactive'){
+    state.mediaRecorder.stop();
+    if(state.recordingStream) state.recordingStream.getTracks().forEach(t => t.stop());
+  }
+  $('recStatus').textContent = '✅ Recording saved!';
+  $('recBtn').className = 'rec-btn rec-btn-start';
+  $('recBtn').textContent = '🎤';
+  $('recBtn').onclick = startRecording;
+}
+
+function resetRecordingForSection(){ state.recordingBlob=null; state.recordingBlobBase64=''; state.recordingSection=null; state.recordingPlayed=false; saveProgress(); const ac=$('actContent'); if(ac){ ac.innerHTML=renderRecording(); } }
+
+function renderRecordingPlayback(){
+  const wrap = $('recPlayback');
+  if(!wrap || !state.recordingBlob) return;
+  const url = URL.createObjectURL(state.recordingBlob);
+  // Build complete HTML at once – never use innerHTML+= as it re-parses the DOM
+  // and destroys event listeners attached to existing elements
+  const secId = sid();
+  wrap.innerHTML = `<p style="color:var(--success);margin-bottom:8px">✅ Great job! Listen to your recording to complete this step:</p>
+    <audio controls id="studentRecording" src="${url}"></audio>
+    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+      <a class="btn btn-ghost" href="${url}" download="${(state.name||'student').replace(/[^a-z0-9]/gi,'_')}_recording.webm">⬇ Download Recording</a>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+      <button class="btn btn-ghost" onclick="resetRecordingForSection()">↺ Re-record</button>
+      <button id="recordDoneBtn" class="btn btn-success" disabled
+        onclick="completeActivity(${secId},8,0);$('nextBtn').disabled=false;flash('Recording complete! ✓','good')">
+        ✓ I listened back – complete this step
+      </button>
+    </div>`;
+  // Attach ended listener to the freshly rendered audio element
+  const audio = $('studentRecording');
+  if(audio){
+    audio.addEventListener('ended', ()=>{
+      state.recordingPlayed = true;
+      saveProgress();
+      const doneBtn = $('recordDoneBtn');
+      if(doneBtn) doneBtn.disabled = false;
+    }, {once:true});
+  }
+  // If already played (restored from saved progress), enable the button immediately
+  if(state.recordingPlayed){
+    const doneBtn = $('recordDoneBtn');
+    if(doneBtn) doneBtn.disabled = false;
+  }
+}
+
+
+// ═══════════════════════════════════════════════
+//  F U L L   T E X T   M O D A L
+// ═══════════════════════════════════════════════
+function showTextModal(sectionId){
+  if(document.getElementById('textModal')) return; // already open
+  const s = DATA.sections[(sectionId || sid()) - 1];
+  const overlay = document.createElement('div');
+  overlay.id = 'textModal';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.88);overflow-y:auto;padding:16px;';
+  const hebrewBlock = (s.translationHebrew)
+    ? (lvl()===1
+        ? `<div style="margin-top:16px"><div style="color:var(--success);font-family:var(--font-head);font-size:.85rem;padding:8px 0;margin-bottom:8px">🌍 תרגום עברי – Hebrew Translation</div>
+           <div style="padding:16px;background:rgba(39,174,96,.06);border:1px solid rgba(39,174,96,.2);border-radius:8px;direction:rtl;text-align:right;font-size:.9rem;line-height:1.9">${s.translationHebrew}</div>
+           </div>`
+        : `<details style="margin-top:16px"><summary style="cursor:pointer;color:var(--brass);font-family:var(--font-head);font-size:.85rem;padding:8px 0">🌍 Hebrew Translation / תרגום עברי</summary>
+           <div style="margin-top:10px;padding:16px;background:rgba(39,174,96,.06);border:1px solid rgba(39,174,96,.2);border-radius:8px;direction:rtl;text-align:right;font-size:.9rem;line-height:1.9">${s.translationHebrew}</div>
+           </details>`)
+    : '';
+  overlay.innerHTML = `<div style="max-width:720px;margin:0 auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+      <span style="color:var(--brass);font-family:var(--font-head);font-size:1rem">${s.icon} ${s.title} – Full Text</span>
+      <button class="btn btn-ghost" style="padding:8px 16px" onclick="closeTextModal()">✕ Close</button>
+    </div>
+    <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:22px;line-height:2;font-size:1rem">${s.text.replace(/\n/g,'<br><br>')}</div>
+    ${hebrewBlock}
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn btn-ghost" onclick="closeTextModal()">✕ Close &amp; Return</button>
+    </div>
+  </div>`;
+  document.body.appendChild(overlay);
+  // Close on backdrop click or ESC key
+  overlay.addEventListener('click', e => { if(e.target === overlay) closeTextModal(); });
+  const _escHandler = (e) => { if(e.key === 'Escape'){ closeTextModal(); document.removeEventListener('keydown', _escHandler); } };
+  document.addEventListener('keydown', _escHandler);
+}
+
+function closeTextModal(){
+  const m = document.getElementById('textModal');
+  if(m) m.remove();
+}
+
+function fullTextBtn(){
+  const label = lvl()===1
+    ? '📖 View Full Text / צפה בטקסט המלא'
+    : '📖 View Full Text';
+  return `<div style="text-align:right;margin-bottom:8px">
+    <button class="btn btn-ghost" style="padding:5px 12px;font-size:.78rem" onclick="showTextModal()">${label}</button>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════
+//  N A V I G A T I O N
+// ═══════════════════════════════════════════════
+function go(screen, opts={}){
+  stopSpeech();
+  // Stop all running games / timers
+  if(state.catcherState){ state.catcherState.active=false; if(state.catcherState.wordTimers) state.catcherState.wordTimers.forEach(function(t){clearTimeout(t);}); }
+  if(typeof sqTimer!=='undefined' && sqTimer){ clearInterval(sqTimer); sqTimer=null; }
+  if(state.memoryState && state.memoryState.timer){ clearInterval(state.memoryState.timer); state.memoryState.timer=null; }
+
+  Object.assign(state, opts);
+  state.screen = screen;
+  saveProgress();
+  render();
+}
+
+function goActivity(sectionId, actId){
+  if(!canOpenActivity(sectionId, actId)){ flash('Complete the earlier steps first.','bad'); return; }
+  state.currentSection = sectionId;
+  state.currentActivity = actId;
+  go('activity');
+}
+
+function nextActivity(){
+  stopSpeech();
+  if(!activityFullyDone(sid(), aid())){ flash('Complete this step first.','bad'); return; }
+  const nextAid = aid() + 1;
+  if(nextAid <= 8 && nextAid < ACT_NAMES.length){
+    goActivity(sid(), nextAid);
+  } else {
+    go('hub');
+  }
+}
+
+function prevActivity(){
+  stopSpeech();
+  // Stop any in-progress games
+  if(state.catcherState){ state.catcherState.active=false; if(state.catcherState.wordTimers) state.catcherState.wordTimers.forEach(t=>clearTimeout(t)); }
+  if(state.quizState && typeof sqTimer !== 'undefined' && sqTimer){ clearInterval(sqTimer); sqTimer = null; }
+  if(state.memoryState && state.memoryState.timer){ clearInterval(state.memoryState.timer); }
+  if(aid() > 0) goActivity(sid(), aid()-1);
+  else go('hub');
+}
+
+// ═══════════════════════════════════════════════
+//  R E N D E R   S Y S T E M
+// ═══════════════════════════════════════════════
+function render(){
+  const app = $('app');
+  app.innerHTML = '';
+  switch(state.screen){
+    case 'welcome': app.innerHTML = renderWelcome(); break;
+    case 'name':    app.innerHTML = renderName(); break;
+    case 'level':   app.innerHTML = renderLevel(); break;
+    case 'hub':     app.innerHTML = renderHub(); break;
+    case 'activity':app.innerHTML = renderActivityScreen(); setTimeout(initActivity,50); break;
+    case 'results': app.innerHTML = renderResults(); break;
+  }
+  attachListeners();
+}
+
+// ═══════════════════════════════════════════════
+//  W E L C O M E
+// ═══════════════════════════════════════════════
+function renderWelcome(){
+  const saved = hasSavedProgress();
+  return `<div class="welcome-screen fade-in">
+    <div style="font-size:4rem;margin-bottom:16px">⚙️</div>
+    <h1 class="welcome-title">CRAZY INVENTIONS</h1>
+    <p class="welcome-sub">THE RUBE GOLDBERG CHALLENGE</p>
+    <div class="chain-visual">
+      <span class="chain-item">⚙</span><span>→</span>
+      <span class="chain-item">🎱</span><span>→</span>
+      <span class="chain-item">🪣</span><span>→</span>
+      <span class="chain-item">⚡</span><span>→</span>
+      <span class="chain-item">🏆</span>
+    </div>
+    <div class="card" style="max-width:560px;margin:20px auto;text-align:left">
+      <p style="line-height:1.7;color:var(--dim);font-size:.95rem">
+        You are about to enter the world of <strong style="color:var(--brass)">Rube Goldberg</strong> –
+        the master of crazy, wonderful, impractical inventions.<br><br>
+        Complete 3 missions. Earn points. Unlock the secrets of the most
+        <em>unnecessarily complicated</em> machines ever drawn.
+      </p>
+    </div>
+    ${saved ? `<div class="card" style="max-width:560px;width:100%;margin:0 auto 16px;text-align:center">
+      <p style="margin-bottom:12px;color:var(--brass);font-family:var(--font-head)">Saved progress found</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-gold" onclick="continueSavedGame()">▶ Continue</button>
+        <button class="btn btn-outline" onclick="newGame()">↺ New Game</button>
+      </div>
+    </div>` : ''}
+    <button class="btn btn-gold btn-lg" onclick="go('name')" style="margin-top:16px">⚙️ START MISSION</button>
+    <p class="text-dim text-sm mt-16">Unit 3 • Crazy Inventions • ESL 9th Grade</p>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════
+//  N A M E   E N T R Y
+// ═══════════════════════════════════════════════
+function renderName(){
+  return `<div class="welcome-screen fade-in">
+    <div style="font-size:3rem">🪪</div>
+    <h2 style="margin:16px 0;color:var(--brass)">AGENT IDENTIFICATION</h2>
+    <p class="text-dim mb-16">Enter your name to begin the mission</p>
+    <div class="card" style="max-width:400px;width:100%;margin:0 auto">
+      <label style="display:block;margin-bottom:8px;font-family:var(--font-mono);font-size:.85rem;color:var(--dim)">YOUR NAME</label>
+      <input type="text" id="nameInput" placeholder="Type your name here..." maxlength="40"
+        style="margin-bottom:16px" onkeydown="if(event.key==='Enter')submitName()">
+      <button class="btn btn-gold btn-block" onclick="submitName()">ACCEPT ⚙️</button>
+    </div>
+  </div>`;
+}
+function submitName(){
+  const val = ($('nameInput') || {value:''}).value.trim();
+  if(!val){ flash('Please enter your name','bad'); return; }
+  state.name = val;
+  saveProgress();
+  go('level', {name: val});
+}
+function continueSavedGame(){
+  if(loadProgress()) render();
+  else flash('No saved progress found','bad');
+}
+
+// ═══════════════════════════════════════════════
+//  L E V E L   S E L E C T
+// ═══════════════════════════════════════════════
+function renderLevel(){
+  return `<div class="welcome-screen fade-in">
+    <div style="font-size:2.5rem">⚙️</div>
+    <h2 style="margin:12px 0;color:var(--brass)">CHOOSE YOUR LEVEL</h2>
+    <p class="text-dim mb-16">Select the challenge that fits you</p>
+    <div class="level-cards" style="max-width:700px;margin:0 auto 24px">
+      <div class="level-card card lv1${state.level===1?' selected':''}" onclick="selectLevel(1)">
+        <span class="level-icon">🟢</span>
+        <div class="level-label" style="color:var(--success)">LEVEL 1 – SUPPORT</div>
+        <p class="level-desc">Hebrew/Arabic word support<br>
+        Audio starts automatically<br>
+        First-letter hints in exercises<br>
+        Step-by-step guidance</p>
+        ${showHebrew()?'<p style="direction:rtl;color:var(--dim);font-size:.8rem;margin-top:8px">תמיכה בעברית</p>':''}
+      </div>
+      <div class="level-card card lv2${state.level===2?' selected':''}" onclick="selectLevel(2)">
+        <span class="level-icon">🟡</span>
+        <div class="level-label" style="color:var(--brass)">LEVEL 2 – STANDARD</div>
+        <p class="level-desc">Word bank available<br>
+        Moderate scaffolding<br>
+        Audio on demand<br>
+        Good for most students</p>
+      </div>
+      <div class="level-card card lv3${state.level===3?' selected':''}" onclick="selectLevel(3)">
+        <span class="level-icon">🔴</span>
+        <div class="level-label" style="color:var(--danger)">LEVEL 3 – CHALLENGE</div>
+        <p class="level-desc">No word bank<br>
+        No translation hints<br>
+        Harder comprehension<br>
+        Maximum independence</p>
+      </div>
+    </div>
+    ${state.level>0?`<button class="btn btn-gold btn-lg" onclick="go('hub')">BEGIN MISSIONS ⚙️</button>`:''}
+    <p class="text-dim text-sm mt-16">You can change your level at any time in the hub</p>
+  </div>`;
+}
+function selectLevel(n){
+  state.level = n;
+  if(n===1) state.clozeMode = 'easy';
+  else if(n===2) state.clozeMode = 'medium';
+  else state.clozeMode = 'hard';
+  saveProgress();
+  render();
+}
+
+// ═══════════════════════════════════════════════
+//  H U B
+// ═══════════════════════════════════════════════
+function resetAllProgress(){
+  if(confirm('Reset all progress and start over?')) newGame();
+}
+
+function renderHub(){
+  const pct = finalPercent();
+  const total = state.totalScore;
+  const sections = DATA.sections;
+  return `<div class="fade-in">
+    <div class="hub-header">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+        <div>
+          <h2 style="color:var(--brass)">⚙ MISSION CONTROL</h2>
+          <p class="text-dim text-sm">Agent: ${state.name} &nbsp;|&nbsp; ${levelName()}</p>
+        </div>
+        <div style="text-align:right">
+          <div class="hub-score">${total} pts</div>
+          <div class="text-dim text-sm">${pct}% score</div>
+        </div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" style="width:${pct}%"></div>
+      </div>
+    </div>
+
+    <div class="mission-cards">
+      ${sections.map((s,i) => {
+        const locked = !state.unlockedSections.includes(s.id);
+        const done = canUnlockNext(s.id);
+        const sc = sectionScore(s.id);
+        const pcts = sectionCompletionPercent(s.id);
+        const comps = state.completedActivities[s.id].length;
+        const stars = done ? '★★★' : comps >= 3 ? '★★☆' : comps >= 1 ? '★☆☆' : '☆☆☆';
+        const destAct = firstOpenActivityForSection(s.id);
+        return `<div class="card mission-card${locked?' locked':''}" onclick="${locked?'flash(\'Complete the previous mission first!\',\'bad\')':'goActivity('+s.id+','+destAct+')'}">
+          <div class="mission-icon">${s.icon}</div>
+          <div class="mission-info">
+            <div class="mission-title">${s.title}</div>
+            <div class="mission-sub">${s.subtitle}</div>
+            <div class="progress-bar-wrap mt-8" style="height:6px">
+              <div class="progress-bar-fill" style="width:${locked?0:pcts}%"></div>
+            </div>
+            <div class="mission-badge mt-8">
+              <span class="badge ${done?'badge-green':'badge-gold'}">${sc}/40 pts</span>
+              <span style="color:var(--brass);font-size:1rem;letter-spacing:2px">${stars}</span>
+              ${done?'<span class="badge badge-green">✓ COMPLETE</span>':''}
+            </div>
+          </div>
+          ${locked?'<div class="mission-lock">🔒</div>':'<div class="mission-arrow">▶</div>'}
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div class="card mt-12" style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center">
+      <button class="btn btn-outline" onclick="go('level')">⚙ Change Level</button>
+      ${finalPercent()>0?`<button class="btn btn-gold" onclick="go('results')">🏆 View Results</button>`:''}
+      <button class="btn btn-ghost" onclick="resetAllProgress()">🗑 Reset Progress</button>
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════
+//  A C T I V I T Y   S C R E E N   W R A P P E R
+// ═══════════════════════════════════════════════
+function renderActivityScreen(){
+  const s = sec();
+  const a = aid();
+  const name = ACT_NAMES[a] || '📌 Activity';
+  const score = getScore(sid(), a);
+  return `<div class="fade-in">
+    <div class="act-header">
+      <button class="btn btn-ghost" style="padding:8px 14px;font-size:.8rem" onclick="go('hub')">← Hub</button>
+      <div class="act-section-name">${s.icon} ${s.title}</div>
+      <div class="act-score-badge">⭐ ${state.totalScore}pts</div>
+    </div>
+
+    <div class="act-steps">
+      ${ACT_NAMES.map((n,i) => {
+        const done = activityFullyDone(sid(), i);
+        const active = i === a;
+        const optional = i >= 8;
+        return `<div class="step-dot ${done?'done':active?'active':''} ${optional?'optional':''}" 
+          title="${n}" onclick="${done?`goActivity(${sid()},${i})`:''}" style="${active?'cursor:default':''}">
+          ${done?'✓':i+1}
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div class="card">
+      <div class="act-title">${name}</div>
+      <div class="act-subtitle">${s.subtitle} &nbsp;|&nbsp; Level: ${levelName()} ${currentSubsectionFor(a)?'&nbsp;|&nbsp; '+currentSubsectionFor(a).sub.label:''}</div>
+      <div class="act-content" id="actContent">
+        ${renderActivityContent()}
+      </div>
+    </div>
+
+    <div class="act-nav">
+      <button class="btn btn-ghost" onclick="prevActivity()">◀ Back</button>
+      <div style="font-family:var(--font-mono);font-size:.8rem;color:var(--dim);display:flex;align-items:center">
+        ${a+1} / ${ACT_NAMES.length}
+      </div>
+      <button class="btn btn-gold" id="nextBtn" onclick="nextActivity()" ${activityFullyDone(sid(),a)?'':'disabled'}>
+        Next ▶
+      </button>
+    </div>
+  </div>`;
+}
+
+function renderActivityContent(){
+  switch(aid()){
+    case 0: return renderIntro();
+    case 1: return renderVocab();
+    case 2: return renderAudio();
+    case 3: return renderCloze();
+    case 4: return renderMiniGame();
+    case 5: return renderComprehension();
+    case 6: return renderListenAgain();
+    case 7: return renderTranslation();
+    case 8: return renderRecording();
+    default: return '<p>Activity coming soon.</p>';
+  }
+}
+
+function initActivity(){
+  switch(aid()){
+    case 1: initVocab(); break;
+    case 2: initAudio(); break;
+    case 3: initCloze(); break;
+    case 4: initMiniGame(); break;
+    case 5: initComprehension(); break;
+    case 6: initListenAgain(); break;
+    case 7: break;
+    case 8: if(state.recordingBlob && state.recordingSection===sid()) setTimeout(renderRecordingPlayback,50); break;
+  }
+  // If already complete, enable next button
+  if(activityFullyDone(sid(), aid())){
+    const btn = $('nextBtn');
+    if(btn) btn.disabled = false;
+  }
+}
+
+function completeActivity(sid, aid, pts){
+  setScore(sid, aid, pts);
+  markComplete(sid, aid);
+  const btn = $('nextBtn');
+  if(btn) btn.disabled = false;
+  // Unlock next section if needed
+  if(canUnlockNext(sid)){
+    const nxt = sid + 1;
+    if(nxt <= DATA.sections.length && !state.unlockedSections.includes(nxt))
+      state.unlockedSections.push(nxt);
+  }
+  saveProgress();
+}
+
+
+function firstOpenActivityForSection(sectionId){
+  for(let i=0;i<ACT_NAMES.length;i++){
+    if(!activityFullyDone(sectionId, i)) return i;
+  }
+  return 8;
+}
+
+function allRequiredSectionsComplete(){
+  return DATA.sections.every(s => canUnlockNext(s.id));
+}
+
+// ═══════════════════════════════════════════════
+//  ACT 0: S E C T I O N   I N T R O
+// ═══════════════════════════════════════════════
+function renderIntro(){
+  const s = sec();
+  setTimeout(() => { completeActivity(sid(),0,0); $('nextBtn').disabled=false; }, 100);
+  return `<div style="text-align:center;padding:10px">
+    <div style="font-size:4rem;margin-bottom:16px">${s.icon}</div>
+    <h3 style="color:var(--brass);margin-bottom:8px">${s.title}</h3>
+    <p style="color:var(--dim);margin-bottom:20px">${s.subtitle}${lvl()===1?'<br><span dir=rtl style="font-size:.88rem;color:#d8cfbf">קטע קריאה מודרך עם הרבה תמיכה</span>':''}</p>
+    <div class="card" style="background:rgba(201,162,39,.06);border-color:rgba(201,162,39,.3);text-align:left;margin-bottom:16px">
+      <p style="color:var(--dim);font-size:.8rem;letter-spacing:1px;margin-bottom:8px">📋 MISSION BRIEFING</p>
+      <p style="line-height:1.7">${s.mission}</p>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:16px">
+      <span class="badge badge-blue">📚 Read the text</span>
+      <span class="badge badge-gold">🧩 Match vocabulary</span>
+      <span class="badge badge-green">🎮 Play mini game</span>
+    </div>
+    <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:16px;text-align:left;border:1px solid var(--border)">
+      <p style="font-size:.85rem;color:var(--dim);margin-bottom:8px">⚙️ SCORING</p>
+      <p style="font-size:.85rem">Vocab: <strong style="color:var(--brass)">10 pts</strong> &nbsp;|&nbsp; 
+         Cloze: <strong style="color:var(--brass)">10 pts</strong> &nbsp;|&nbsp; 
+         Game: <strong style="color:var(--brass)">10 pts</strong> &nbsp;|&nbsp; 
+         Comprehension: <strong style="color:var(--brass)">10 pts</strong></p>
+      <p style="font-size:.8rem;color:var(--dim);margin-top:4px">Wrong answers reduce your score. Think carefully!</p>
+    </div>
+    <button class="btn btn-gold mt-16" onclick="nextActivity()">⚙️ BEGIN MISSION →</button>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════
+//  ACT 1: V O C A B   M A T C H
+// ═══════════════════════════════════════════════
+let vocabSelected = {word:null, def:null};
+let vocabMatched = [];
+let vocabScore = 0;
+let vocabPenalty = 0;
+let vocabAnswered = {};
+
+function simplifyDefinition(s){
+  if(!s) return '';
+  s = s.replace(/^to\s+/i,'');
+  s = s.replace(/something|someone/gi,'a thing');
+  s = s.replace(/;.*$/,'');
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+function getVocabPool(){
+  const sectionVocab = sec().vocab || [];
+  const info = lvl()===1 ? currentSubsectionFor(1) : null;
+  if(info && info.sub.focusVocab && info.sub.focusVocab.length){
+    const chosen = [];
+    const used = new Set();
+    info.sub.focusVocab.forEach(i => {
+      if(sectionVocab[i] && !used.has(i)) { chosen.push(sectionVocab[i]); used.add(i); }
+    });
+    for(let i=0;i<sectionVocab.length && chosen.length < 4;i++){
+      if(!used.has(i)) { chosen.push(sectionVocab[i]); used.add(i); }
+    }
+    return chosen;
+  }
+  return sectionVocab;
+}
+function getVocabTargetDisplay(w){
+  if(lvl() === 1) return w.hebrew || w.def;
+  if(lvl() === 2) return simplifyDefinition(w.def);
+  return w.def;
+}
+function getVocabTargetLabel(){
+  return lvl()===1 ? 'Hebrew meaning' : (lvl()===2 ? 'Simple meaning' : 'Definition');
+}
+function jsString(s){
+  return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,' ');
+}
+function getVocabChoiceOptions(words, wordIndex){
+  const correct = getVocabTargetDisplay(words[wordIndex]);
+  const distractorPool = words
+    .map((w,i)=>({i, text:getVocabTargetDisplay(w)}))
+    .filter(x => x.i !== wordIndex && x.text !== correct);
+  const needed = lvl()===3 ? 3 : 2;
+  const distractors = shuffle(distractorPool).slice(0, needed).map(x=>x.text);
+  const fallbackPool = (sec().vocab||[])
+    .map(w=>getVocabTargetDisplay(w))
+    .filter(t => t !== correct && !distractors.includes(t));
+  while(distractors.length < needed && fallbackPool.length){
+    distractors.push(fallbackPool.shift());
+  }
+  return shuffle([correct, ...distractors]);
+}
+function renderVocab(){
+  const words = getVocabPool();
+  window._vocabCurrent = words;
+  const vocabInstr = lvl()===1
+    ? bi('🟢 Choose the correct Hebrew meaning for each word. Every word has real choices.','בחרו את הפירוש הנכון בעברית לכל מילה. לכל מילה יש כמה אפשרויות אמיתיות.')
+    : lvl()===2
+    ? '🟡 Choose the correct simple English meaning for each word.'
+    : '🔴 Choose the best full definition for each word.';
+  const items = words.map((w,i)=>{
+    const options = getVocabChoiceOptions(words, i);
+    return `<div class="card card-sm" id="vocabCard${i}" style="margin:10px 0">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+        <div>
+          <div class="vocab-word" style="font-size:1.05rem">${w.emoji? w.emoji+' ' : ''}${w.word}</div>
+          <div class="text-dim text-sm">${getVocabTargetLabel()}</div>
+        </div>
+        <div id="vocabStatus${i}" class="badge ${vocabAnswered[i] ? 'badge-green' : 'badge-blue'}">${vocabAnswered[i] ? bi('Done','סיימתי') : bi('Choose one','בחר תשובה')}</div>
+      </div>
+      <div style="display:grid;gap:8px">
+        ${options.map((opt,oi)=>`<button class="comp-option" id="vqo${i}_${oi}" onclick="vocabChooseOption(${i}, ${oi}, '${jsString(opt)}')">${String.fromCharCode(65+oi)}. ${opt}</button>`).join('')}
+      </div>
+      ${lvl()===3 ? `<div id="vocabExample${i}" class="mt-12 text-dim text-sm" style="display:none">📝 ${w.example || ''}</div>` : ''}
+    </div>`;
+  }).join('');
+  return `<div>${subsectionHeader(1)}<p style="margin-bottom:12px;color:var(--dim);font-size:.9rem">${vocabInstr}</p>${items}<div class="vocab-score-display mt-12">Completed: <span id="vocabCount">${Object.keys(vocabAnswered).length}</span> / ${words.length} &nbsp;|&nbsp; Score: <span id="vocabScore">${vocabScore}</span> pts</div></div>`;
+}
+function initVocab(){
+  vocabSelected = {word:null, def:null};
+  vocabMatched = [];
+  vocabScore = 0;
+  vocabPenalty = 0;
+  vocabAnswered = {};
+  window._vocabCurrent = getVocabPool();
+}
+function vocabChooseOption(wordIndex, optIndex, optText){
+  const words = window._vocabCurrent || getVocabPool();
+  if(vocabAnswered[wordIndex]) return;
+  const correctText = getVocabTargetDisplay(words[wordIndex]);
+  const buttons = Array.from(document.querySelectorAll(`[id^="vqo${wordIndex}_"]`));
+  const clicked = document.getElementById(`vqo${wordIndex}_${optIndex}`);
+  if(optText === correctText){
+    if(clicked) clicked.classList.add('correct');
+    buttons.forEach(btn => btn.disabled = true);
+    vocabAnswered[wordIndex] = true;
+    vocabScore += (lvl()===3 ? 3 : 2);
+    const status = $('vocabStatus'+wordIndex);
+    if(status){ status.textContent = 'Correct'; status.className = 'badge badge-green'; }
+    const ex = $('vocabExample'+wordIndex);
+    if(ex) ex.style.display = 'block';
+    const vc=$('vocabCount'), vs=$('vocabScore');
+    if(vc) vc.textContent = Object.keys(vocabAnswered).length;
+    if(vs) vs.textContent = vocabScore;
+    if(Object.keys(vocabAnswered).length === words.length){
+      progressSubActivity(1, Math.min(10, vocabScore));
+    }
+  } else {
+    if(clicked) clicked.classList.add('wrong');
+    const status = $('vocabStatus'+wordIndex);
+    if(status){ status.textContent = 'Try again'; status.className = 'badge badge-red'; }
+    vocabPenalty += (lvl()===1 ? 0 : 1);
+    vocabScore = Math.max(0, vocabScore - (lvl()===1 ? 0 : 1));
+    const vs=$('vocabScore'); if(vs) vs.textContent = vocabScore;
+    setTimeout(()=>{ if(clicked) clicked.classList.remove('wrong'); }, 450);
+    flash(bi('Try again','נסה שוב'),'bad');
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  ACT 2: A U D I O   R E A D I N G  (with sub-sections)
+// ═══════════════════════════════════════════════
+function renderAudio(){
+  const info = currentSubsectionFor(2);
+  if(!info){ return renderAudioFull(); }
+  const {idx, sub, total} = info;
+  const isLast = idx >= total - 1;
+  const words = sub.text.split(/\s+/);
+  const wordSpans = words.map((w,i)=>`<span class="text-word" id="tw${i}">${w}</span>`).join(' ');
+  let vocabPreview = '';
+  if(lvl()===1 && sub.focusVocab && sub.focusVocab.length){
+    const fv = sub.focusVocab.map(i => sec().vocab[i]).filter(Boolean);
+    vocabPreview = `<div style="margin-bottom:14px;padding:12px;background:rgba(201,162,39,.08);border:1px solid rgba(201,162,39,.25);border-radius:8px"><p style="font-size:.75rem;color:var(--brass);font-family:var(--font-head);letter-spacing:1px;margin-bottom:10px">📚 KEY WORDS IN THIS PART – read before you listen</p><div style="display:flex;flex-wrap:wrap;gap:10px">${fv.map(v=>`<div style="display:flex;align-items:flex-start;gap:8px;background:rgba(255,255,255,.04);padding:8px 10px;border-radius:6px;border:1px solid var(--border);max-width:100%;flex:1 1 160px"><span style="font-size:1.4rem;flex-shrink:0">${v.emoji||'📖'}</span><div style="min-width:0"><div style="font-family:var(--font-head);font-size:.88rem;color:var(--cream)">${v.word}</div><div style="font-size:.78rem;color:var(--dim);line-height:1.4;margin-top:2px">${v.def}</div><div style="font-size:.74rem;color:rgba(201,162,39,.8);direction:rtl;margin-top:2px">${v.hebrew||''}</div></div></div>`).join('')}</div></div>`;
+  }
+  const weakSupport = lvl()===1 ? `<div class="translation-help-box"><div style="font-family:var(--font-head);font-size:.8rem;color:var(--success);margin-bottom:6px">תמיכה בעברית</div><div>${(sec().translationHebrew||'')}</div></div>` : '';
+  return `<div>${subsectionHeader(2)}${fullTextBtn()}<p style="margin-bottom:12px;color:var(--dim);font-size:.85rem">${bi('Listen to this part and follow the words. You must listen at least once before continuing.','האזינו לחלק הזה ועקבו אחרי המילים. צריך לשמוע לפחות פעם אחת לפני שממשיכים.')}</p>${vocabPreview}${weakSupport}<div class="text-display" id="textDisplay">${wordSpans}</div><div class="audio-controls"><button class="audio-btn" id="audioPlayBtn" onclick="toggleAudio()">▶</button><div class="audio-status" id="audioStatus">Ready to listen</div><button class="audio-btn" onclick="stopSpeech()" style="font-size:.9rem">⏹</button></div><div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">${idx > 0 ? `<button class="btn btn-ghost" onclick="audioSubPrev(event)">${bi('◀ Previous Part','◀ חלק קודם')}</button>` : ''}${!isLast ? `<button class="btn btn-gold" onclick="audioSubNext(event)">${bi('Next Part ▶','חלק הבא ▶')}</button>` : `<button class="btn btn-success" onclick="completeAudioActivity()">${bi('✓ All parts done – continue','✓ כל החלקים הושלמו – המשך')}</button>`}</div>${isLast && lvl()===3 ? `<div style="margin-top:12px;padding:11px 14px;background:rgba(192,57,43,.07);border:1px solid rgba(192,57,43,.25);border-radius:8px;font-size:.84rem;color:var(--dim)">🔴 <strong style="color:var(--danger)">Challenge:</strong> Before clicking continue, try to summarise the key idea of this part in one sentence.</div>` : ''}</div>`;
+}
+function renderAudioFull(){
+  const words = sec().text.split(/\s+/);
+  const wordSpans = words.map((w,i)=>`<span class="text-word" id="tw${i}">${w}</span>`).join(' ');
+  const weakSupport = lvl()===1 ? `<div class="translation-help-box">${sec().translationHebrew||''}</div>` : ''; return `<div>${fullTextBtn()}<p style="margin-bottom:12px;color:var(--dim);font-size:.9rem">${bi('Listen and read along. You must listen at least once before continuing.','האזינו ועקבו אחרי המילים. צריך לשמוע לפחות פעם אחת לפני שממשיכים.')}</p>${weakSupport}<div class="text-display" id="textDisplay">${wordSpans}</div><div class="audio-controls"><button class="audio-btn" id="audioPlayBtn" onclick="toggleAudio()">▶</button><div class="audio-status" id="audioStatus">Ready to listen</div><button class="audio-btn" onclick="stopSpeech()" style="font-size:.9rem">⏹</button></div><button class="btn btn-success mt-16" onclick="completeAudioActivity()">${bi('✓ Mark Complete','✓ סמן כהושלם')}</button></div>`;
+}
+function checkQuickQ(chosen, correct){
+  // Quick question is now handled through the comprehension sub-step system.
+  // This stub is kept for backward compatibility with any cached HTML.
+}
+function audioSubNext(e){
+  stopSpeech();
+  // Guard against double-tap
+  const btn = (e && e.currentTarget) || (e && e.target);
+  if(btn && btn.disabled) return;
+  // Require student to have listened meaningfully before advancing
+  if(!hasAudioSufficient(false)){
+    flash(bi('Please listen for longer before continuing.','האזינו יותר זמן לפני שממשיכים.'),'bad');
+    return;
+  }
+  if(btn) btn.disabled = true;
+  const subs = sec().subSections || [];
+  const next = getSubStep('audio') + 1;
+  if(next < subs.length){
+    setSubStep('audio', next);
+    const ac = $('actContent');
+    if(ac){ ac.innerHTML = renderAudio(); setTimeout(initAudio, 30); }
+  } else {
+    completeAudioActivity();
+  }
+}
+function audioSubPrev(e){
+  stopSpeech();
+  const btn = (e && e.currentTarget) || (e && e.target);
+  if(btn) btn.disabled = true;
+  const prev = getSubStep('audio') - 1;
+  if(prev >= 0){
+    setSubStep('audio', prev);
+    const ac = $('actContent');
+    if(ac){ ac.innerHTML = renderAudio(); setTimeout(initAudio, 30); }
+  }
+}
+function initAudio(){
+  // NOTE: iOS Safari requires audio to be triggered by a direct user tap.
+  // Auto-play is intentionally removed – the ▶ button must be pressed.
+  // We warm up voices so they are ready when the user taps.
+  if(speechSynthesis.getVoices().length === 0){
+    speechSynthesis.onvoiceschanged = () => { speechSynthesis.onvoiceschanged = null; };
+  }
+}
+let audioSpeed = 0.9;
+function changeSpeed(val){ audioSpeed = parseFloat(val); }
+function toggleAudio(){
+  if(ttsActive){ stopSpeech(); return; }
+  const info = currentSubsectionFor(2);
+  const text = info ? info.sub.text : sec().text;
+  speakText(text, null, ()=>{},
+    ()=>{ markAudioStarted('audioStarted'); },
+    ()=>{ markAudioSufficient(false); });
+}
+function completeAudioActivity(){
+  if(isComplete(sid(), 2) && activityFullyDone(sid(), 2)) return; // already done
+  if(!hasAudioSufficient(false)){ flash(bi('Please listen for longer before continuing.','האזינו יותר זמן לפני שממשיכים.'),'bad'); return; }
+  progressSubActivity(2, 0);
+}
+
+// ═══════════════════════════════════════════════
+//  ACT 3: C L O Z E  (with sub-sections)
+// ═══════════════════════════════════════════════
+let clozeBlanks = [];
+let clozeSubmitted = false;
+
+function renderCloze(){
+  const s = sec();
+  const subs = s.subSections;
+  const mode = lvl()===1 ? 'easy' : lvl()===2 ? 'medium' : 'hard';
+  state.clozeMode = mode;
+  const modeLabel = {
+    easy:'🟢 Support – Word Bank + First Letter Hints (fewer blanks)',
+    medium:'🟡 Standard – Word Bank Only',
+    hard:'🔴 Challenge – No Word Bank, No Hints'
+  };
+
+  if(!subs || !subs.length){
+    // Fallback: full cloze (no sub-sections)
+    return `<div>${fullTextBtn()}
+      <div class="cloze-mode-btns"><button class="cloze-mode-btn active" disabled>${modeLabel[mode]}</button></div>
+      ${lvl()===1?`<p style="margin-bottom:10px;font-size:.82rem;color:var(--success)">🟢 Use the word bank and first-letter hints below.</p>`:''}
+      ${lvl()===3?`<p style="margin-bottom:10px;font-size:.82rem;color:var(--danger)">🔴 No word bank. Use the full text button above if you need to check.</p>`:''}
+      <div class="cloze-text" id="clozeText">${buildClozeHTML()}</div>
+      ${mode !== 'hard' ? `<div class="word-bank" id="wordBank">${buildWordBank()}</div>` : ''}
+      <div class="cloze-submit">
+        <button class="btn btn-gold" onclick="checkCloze()" id="clozeCheckBtn">${bi('⚙️ Check Answers','⚙️ בדוק תשובות')}</button>
+        <button class="btn btn-ghost" onclick="resetCloze()" style="margin-left:8px">${bi('↺ Reset','↺ אפס')}</button>
+      </div>
+      <div id="clozeResult"></div>
+    </div>`;
+  }
+
+  const subIdx = getSubStep('cloze');
+  const sub = subs[Math.min(subIdx, subs.length-1)];
+  const isLast = subIdx >= subs.length - 1;
+
+  // Level 1: use shorter word list (clozeWordsL1)
+  // Level 3: no word bank, no hints, all blanks from clozeText
+  const wordsForLevel = (lvl()===1 && sub.clozeWordsL1) ? sub.clozeWordsL1 : sub.clozeWords;
+
+  return `<div>${fullTextBtn()}
+    ${subsectionHeader(3)}
+    <div class="cloze-mode-btns">
+      <button class="cloze-mode-btn active" disabled>${modeLabel[mode]}</button>
+    </div>
+    ${lvl()===1?`<p style="margin-bottom:10px;font-size:.82rem;color:var(--success)">🟢 Only ${wordsForLevel.length} blank${wordsForLevel.length===1?'':'s'} in this part. Use the word bank to help!</p>`:''}
+    ${lvl()===3?`<p style="margin-bottom:10px;font-size:.82rem;color:var(--danger)">🔴 No word bank. Use the full text button above if you need to check.</p>`:''}
+    <div class="cloze-text" id="clozeText">${buildClozeHTMLSub(sub, mode)}</div>
+    ${mode !== 'hard' ? `<div class="word-bank" id="wordBank">${buildWordBankSub(wordsForLevel)}</div>` : ''}
+    <div class="cloze-submit">
+      <button class="btn btn-gold" onclick="checkCloze()" id="clozeCheckBtn">${bi('⚙️ Check Answers','⚙️ בדוק תשובות')}</button>
+      <button class="btn btn-ghost" onclick="resetCloze()" style="margin-left:8px">${bi('↺ Reset','↺ אפס')}</button>
+    </div>
+    <div id="clozeResult"></div>
+  </div>`;
+}
+
+function buildClozeHTMLSub(sub, mode){
+  // For level 1, strip extra blanks beyond clozeWordsL1 count
+  let text = sub.clozeText;
+  if(mode === 'easy' && sub.clozeWordsL1 && sub.clozeWordsL1.length < sub.clozeWords.length){
+    // Replace extra blanks with plain text (show answer inline for harder ones)
+    const l1Set = new Set(sub.clozeWordsL1.map(w=>w.toLowerCase()));
+    text = text.replace(/\[([^\]]+)\]/g, (m, ans) => {
+      if(l1Set.has(ans.toLowerCase())) return m; // keep as blank
+      return `<u style="color:var(--brass);font-weight:bold">${ans}</u>`; // show answer
+    });
+  }
+  clozeBlanks = [];
+  let html = '';
+  const parts = text.split(/\[([^\]]+)\]/g);
+  let blankIdx = 0;
+  for(let i=0; i<parts.length; i++){
+    if(i%2===0){
+      html += parts[i].replace(/\n/g,'<br>');
+    } else {
+      const answer = parts[i];
+      const hint = mode==='easy' ? answer[0].toUpperCase()+'___ ' : '';
+      const width = Math.max(80, answer.length * 11);
+      html += `<span class="cloze-blank">
+        ${mode==='easy'?`<span class="cloze-hint">${hint}</span>`:''}
+        <input type="text" class="cloze-input" id="cb${blankIdx}" data-answer="${answer}" 
+          placeholder="${mode==='easy'?answer[0]+'...':'...'}" style="width:${width}px"
+          onclick="focusBlank(this)" oninput="this.classList.remove('correct','wrong')" 
+          onkeydown="if(event.key==='Enter')jumpNextBlank(${blankIdx})">
+      </span>`;
+      clozeBlanks.push(answer);
+      blankIdx++;
+    }
+  }
+  return html;
+}
+
+function buildClozeHTML(){
+  const s = sec();
+  const text = s.clozeText;
+  const mode = state.clozeMode;
+  clozeBlanks = [];
+  let html = '';
+  const parts = text.split(/\[([^\]]+)\]/g);
+  let blankIdx = 0;
+  for(let i=0; i<parts.length; i++){
+    if(i%2===0){
+      html += parts[i].replace(/\n/g,'<br>');
+    } else {
+      const answer = parts[i];
+      const hint = mode==='easy' ? answer[0].toUpperCase()+'___ ' : '';
+      const width = Math.max(80, answer.length * 11);
+      html += `<span class="cloze-blank">
+        ${mode==='easy'?`<span class="cloze-hint">${hint}</span>`:''}
+        <input type="text" class="cloze-input" id="cb${blankIdx}" data-answer="${answer}" 
+          placeholder="${mode==='easy'?answer[0]+'...':'...'}" style="width:${width}px"
+          onclick="focusBlank(this)" oninput="this.classList.remove('correct','wrong')" 
+          onkeydown="if(event.key==='Enter')jumpNextBlank(${blankIdx})">
+      </span>`;
+      clozeBlanks.push(answer);
+      blankIdx++;
+    }
+  }
+  return html;
+}
+
+function buildWordBankSub(words){
+  let pool = [...words];
+  const sub = currentSubsectionFor(3)?.sub;
+  const extras = ((sub && sub.clozeWords) ? sub.clozeWords : []).filter(w=>!pool.includes(w));
+  extras.forEach(w=>{ if(pool.length < Math.max(3, words.length+1)) pool.push(w); });
+  const sectionExtras = (sec().clozeWords||[]).filter(w=>!pool.includes(w));
+  sectionExtras.forEach(w=>{ if(pool.length < Math.max(4, words.length+2)) pool.push(w); });
+  return shuffle(pool).map(w => `<span class="word-bank-word" id="wb_${w.replace(/ /g,'_')}" onclick="fillFromBank('${w.replace(/'/g,"\'")}')">${w}</span>`).join('');
+}
+
+function buildWordBank(){
+  const words = shuffle([...sec().clozeWords]);
+  return words.map(w => `<span class="word-bank-word" id="wb_${w.replace(/ /g,'_')}" onclick="fillFromBank('${w.replace(/'/g,"\\'")}')">${w}</span>`).join('');
+}
+
+function focusBlank(el){
+  el.style.outline = '2px solid var(--brass)';
+  window._lastFocusedBlank = el;
+}
+
+function fillFromBank(word){
+  // Fill the currently focused or next empty blank
+  const el = window._lastFocusedBlank;
+  if(el && !el.value){
+    el.value = word;
+    el.classList.add('filled');
+    const wb = $(`wb_${word.replace(/ /g,'_')}`);
+    if(wb) wb.classList.add('used');
+    return;
+  }
+  // Find next empty
+  for(let i=0;i<clozeBlanks.length;i++){
+    const inp = $('cb'+i);
+    if(inp && !inp.value){
+      inp.value = word;
+      inp.classList.add('filled');
+      const wb = $(`wb_${word.replace(/ /g,'_')}`);
+      if(wb) wb.classList.add('used');
+      window._lastFocusedBlank = inp;
+      return;
+    }
+  }
+}
+
+function jumpNextBlank(current){
+  const next = $('cb'+(current+1));
+  if(next){ next.focus(); window._lastFocusedBlank = next; }
+}
+
+function setClozeMode(mode){ return; }
+
+function initCloze(){
+  clozeSubmitted = false;
+  window._lastFocusedBlank = null;
+}
+
+function resetCloze(){
+  clozeSubmitted = false;
+  for(let i=0;i<clozeBlanks.length;i++){
+    const inp = $('cb'+i);
+    if(inp){ inp.value=''; inp.className='cloze-input'; }
+  }
+  document.querySelectorAll('.word-bank-word').forEach(w=>w.classList.remove('used'));
+  const res = $('clozeResult'); if(res) res.innerHTML='';
+  window._lastFocusedBlank = null;
+}
+
+function checkCloze(){
+  if(clozeSubmitted) return;
+  // 0-blank sub-section: still require audio to have been done
+  if(clozeBlanks.length === 0){
+    if(!hasAudioSufficient(false)){ flash(bi('Listen to the text first.','האזינו לטקסט קודם.'),'bad'); return; }
+    progressSubActivity(3, 10);
+    return;
+  }
+  // Require at least one blank to be filled before checking
+  const anyFilled = clozeBlanks.some((_,i)=>{ const inp=$('cb'+i); return inp && inp.value.trim().length>0; });
+  if(!anyFilled){ flash(bi('Fill in at least one blank first.','מלאו לפחות שדה אחד קודם.'),'bad'); return; }
+  let correct = 0, wrong = 0;
+  clozeBlanks.forEach((answer, i) => {
+    const inp = $('cb'+i);
+    if(!inp) return;
+    const val = inp.value.trim().toLowerCase();
+    if(val === answer.toLowerCase()){
+      inp.classList.add('correct');
+      correct++;
+    } else {
+      inp.classList.add('wrong');
+      inp.value = '';
+      wrong++;
+    }
+  });
+  const pts = Math.max(0, Math.round((correct / clozeBlanks.length) * 10) - wrong);
+  const res = $('clozeResult');
+  if(wrong===0){
+    clozeSubmitted = true;
+    if(res) res.innerHTML = `<div class="cloze-score-wrap">
+      <p style="font-size:1.1rem">✓ Correct: <strong style="color:var(--success)">${correct}</strong> / ${clozeBlanks.length} &nbsp;|&nbsp; Points: <strong style="color:var(--brass)">${pts}</strong></p>
+      <p style="color:var(--success);font-weight:bold">🎉 Perfect! Moving to the next part…</p>
+    </div>`;
+    // Delay progression so feedback is visible first
+    setTimeout(() => progressSubActivity(3, pts), 600);
+  } else {
+    // Set flag immediately so rapid re-clicks can't append duplicate buttons
+    clozeSubmitted = true;
+    // Show result with inline Accept + Reset – no setTimeout race risk
+    if(res) res.innerHTML = `<div class="cloze-score-wrap">
+    <p style="font-size:1.1rem">✓ Correct: <strong style="color:var(--success)">${correct}</strong> / ${clozeBlanks.length} &nbsp;|&nbsp; Points: <strong style="color:var(--brass)">${pts}</strong></p>
+    <p style="color:var(--dim);font-size:.85rem;margin-top:4px">🔁 Fix the highlighted blanks and try again.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <button class="btn btn-outline" style="touch-action:manipulation" onclick="resetCloze()">↺ Try Again</button>
+
+    </div>
+    </div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  ACT 4: M I N I   G A M E
+// ═══════════════════════════════════════════════
+function renderMiniGame(){
+  const type = sec().miniGameType;
+  if(type==='memory') return renderMemoryGame();
+  if(type==='catcher') return renderCatcherGame();
+  if(type==='speedquiz') return renderSpeedQuiz();
+  return '<p>Game loading...</p>';
+}
+
+function initMiniGame(){
+  const type = sec().miniGameType;
+  if(type==='memory') initMemoryGame();
+  if(type==='catcher') initCatcherGame();
+  if(type==='speedquiz') initSpeedQuiz();
+}
+
+// ---- MEMORY FLIP ----
+function renderMemoryGame(){
+  return `<div>
+    <p style="color:var(--dim);font-size:.9rem;margin-bottom:12px">
+      🃏 <strong>Memory Match!</strong> Find the matching word + definition pairs. Faster = more points!
+    </p>
+    <div class="game-stats">
+      <div class="game-stat"><div class="game-stat-val" id="memTime">60</div><div class="game-stat-lbl">Seconds</div></div>
+      <div class="game-stat"><div class="game-stat-val" id="memMatches">0</div><div class="game-stat-lbl">Matched</div></div>
+      <div class="game-stat"><div class="game-stat-val" id="memErrors">0</div><div class="game-stat-lbl">Errors</div></div>
+    </div>
+    <div class="memory-grid" id="memGrid"></div>
+    <div id="memResult"></div>
+  </div>`;
+}
+
+function initMemoryGame(){
+  const pairs = sec().memoryPairs;
+  state.memoryState = {
+    cards: shuffle([...pairs.map((p,i)=>({id:i,type:'word',text:p.word,pairId:i})),
+                    ...pairs.map((p,i)=>({id:i+pairs.length,type:'def',text:p.def,pairId:i}))]),
+    flipped: [],
+    matched: [],
+    errors: 0,
+    startTime: Date.now(),
+    timeLeft: 60,
+    locked: false,
+    timer: null,
+  };
+  renderMemGrid();
+  state.memoryState.timer = setInterval(memTick, 1000);
+}
+
+function renderMemGrid(){
+  const grid = $('memGrid'); if(!grid) return;
+  const ms = state.memoryState;
+  grid.innerHTML = ms.cards.map((c,i) => `
+    <div class="mem-card ${ms.matched.includes(c.pairId+'_'+c.type)?'matched':ms.flipped.includes(i)?'flipped':''}" 
+         onclick="flipMemCard(${i})" id="mc${i}">
+      <div class="mem-card-inner">
+        <div class="mem-card-front">⚙</div>
+        <div class="mem-card-back">${c.text}</div>
+      </div>
+    </div>`).join('');
+}
+
+function flipMemCard(i){
+  const ms = state.memoryState;
+  if(!ms || ms.locked) return;
+  if(ms.flipped.includes(i)) return;
+  const card = ms.cards[i];
+  if(ms.matched.includes(card.pairId+'_word') && ms.matched.includes(card.pairId+'_def')) return;
+  ms.flipped.push(i);
+  const el = $('mc'+i); if(el) el.classList.add('flipped');
+
+  if(ms.flipped.length === 2){
+    ms.locked = true;
+    const c1 = ms.cards[ms.flipped[0]];
+    const c2 = ms.cards[ms.flipped[1]];
+    if(c1.pairId === c2.pairId && c1.type !== c2.type){
+      // Match!
+      ms.matched.push(c1.pairId+'_word', c1.pairId+'_def');
+      ms.flipped.forEach(fi => { const el=$('mc'+fi); if(el) el.classList.add('matched'); });
+      ms.flipped = [];
+      ms.locked = false;
+      const m = $('memMatches'); if(m) m.textContent = Math.floor(ms.matched.length/2);
+      if(ms.matched.length === ms.cards.length){ endMemGame(true); }
+    } else {
+      // No match
+      ms.errors++;
+      const e = $('memErrors'); if(e) e.textContent = ms.errors;
+      setTimeout(()=>{
+        ms.flipped.forEach(fi => { const el=$('mc'+fi); if(el) el.classList.remove('flipped'); });
+        ms.flipped = []; ms.locked = false;
+      }, 900);
+    }
+  }
+}
+
+function memTick(){
+  const ms = state.memoryState; if(!ms) return;
+  ms.timeLeft--;
+  const t = $('memTime');
+  if(t){ t.textContent = ms.timeLeft; if(ms.timeLeft <= 10) t.classList.add('urgent'); }
+  if(ms.timeLeft <= 0){ endMemGame(false); }
+}
+
+function endMemGame(won){
+  const ms = state.memoryState; if(!ms) return;
+  clearInterval(ms.timer);
+  const pairs = Math.floor(ms.matched.length/2);
+  const total = sec().memoryPairs.length;
+  const pts = Math.max(0, Math.round((pairs/total)*10) - Math.floor(ms.errors/2));
+  const res = $('memResult');
+  if(res) res.innerHTML = `<div style="text-align:center;padding:16px;background:rgba(255,255,255,.05);border-radius:8px;margin-top:12px">
+    <p style="font-size:1.3rem;color:var(--brass);margin-bottom:8px">${won?'🎉 Well done!':'⏰ Time\'s up!'}</p>
+    <p>Matched: <strong>${pairs}/${total}</strong> &nbsp;|&nbsp; Errors: <strong>${ms.errors}</strong> &nbsp;|&nbsp; Score: <strong style="color:var(--brass)">${pts} pts</strong></p>
+    <button class="btn btn-gold mt-12" onclick="completeActivity(${sid()},4,${pts});$('nextBtn').disabled=false;flash('Game complete!','good')">✓ Claim Score</button>
+    <button class="btn btn-ghost" style="margin-left:8px;margin-top:12px" onclick="$('actContent').innerHTML=renderMiniGame();setTimeout(initMiniGame,50)">↺ Try Again</button>
+  </div>`;
+}
+
+// ---- WORD CATCHER ----
+function renderCatcherGame(){
+  return `<div>
+    <p style="color:var(--dim);font-size:.9rem;margin-bottom:8px">
+      🎯 <strong>Word Catcher!</strong> Read the definition and click the CORRECT word when it appears!
+    </p>
+    <div class="game-stats">
+      <div class="game-stat"><div class="game-stat-val" id="catchScore">0</div><div class="game-stat-lbl">Score</div></div>
+      <div class="game-stat"><div class="game-stat-val" id="catchRound">1</div><div class="game-stat-lbl">Round</div></div>
+      <div class="game-stat"><div class="game-stat-val" id="catchTotal">${sec().catcherRounds.length}</div><div class="game-stat-lbl">Total</div></div>
+    </div>
+    <div class="catcher-def" id="catcherDef">Loading...</div>
+    <div class="catcher-arena" id="catcherArena"></div>
+    <div id="catchResult"></div>
+  </div>`;
+}
+
+function initCatcherGame(){
+  state.catcherState = {
+    round: 0,
+    score: 0,
+    errors: 0,
+    timer: null,
+    words: [],
+    active: true,
+  };
+  runCatcherRound();
+}
+
+function runCatcherRound(){
+  const cs = state.catcherState; if(!cs || !cs.active) return;
+  const rounds = sec().catcherRounds;
+  if(cs.round >= rounds.length){ endCatcherGame(); return; }
+  const r = rounds[cs.round];
+  const def = $('catcherDef'); if(def) def.textContent = '🔍 ' + r.def;
+  const arena = $('catcherArena'); if(!arena) return;
+  arena.innerHTML = '';
+  // Spawn words with delays
+  const allWords = shuffle([r.correct, ...r.distractors]);
+  cs.wordTimers = [];
+  allWords.forEach((word, i) => {
+    const t = setTimeout(() => {
+      if(!cs.active) return;
+      const wEl = document.createElement('div');
+      wEl.className = 'catcher-word';
+      wEl.textContent = word;
+      wEl.style.left = (5 + Math.random()*75) + '%';
+      wEl.style.top = (10 + Math.random()*70) + '%';
+      arena.appendChild(wEl);
+      const handleCatch = (ev) => {
+        ev.preventDefault();
+        if(wEl._catchHandled) return;
+        wEl._catchHandled = true;
+        if(word === r.correct){
+          wEl.classList.add('correct-catch');
+          cs.score += 2; cs.round++;
+          const sc = $('catchScore'); if(sc) sc.textContent = cs.score;
+          const rn = $('catchRound'); if(rn) rn.textContent = cs.round+1;
+          setTimeout(() => runCatcherRound(), 700);
+        } else {
+          wEl.classList.add('wrong-catch');
+          wEl._catchHandled = false; // allow retrying after wrong
+          cs.errors++;
+          cs.score = Math.max(0, cs.score - 1);
+          const sc = $('catchScore'); if(sc) sc.textContent = cs.score;
+          setTimeout(() => wEl.classList.remove('wrong-catch'), 500);
+        }
+      };
+      wEl.addEventListener('touchstart', handleCatch, {passive:false});
+      wEl.addEventListener('click', handleCatch);
+    }, i * 600);
+    cs.wordTimers.push(t);
+  });
+}
+
+function endCatcherGame(){
+  const cs = state.catcherState; if(!cs) return;
+  cs.active = false;
+  const pts = Math.min(10, cs.score);
+  const res = $('catchResult');
+  if(res) res.innerHTML = `<div style="text-align:center;padding:16px;background:rgba(255,255,255,.05);border-radius:8px;margin-top:12px">
+    <p style="font-size:1.3rem;color:var(--brass)">🎯 Game Over!</p>
+    <p>Score: <strong>${cs.score}</strong> | Errors: <strong>${cs.errors}</strong> | Points: <strong style="color:var(--brass)">${pts}</strong></p>
+    <button class="btn btn-gold mt-12" onclick="completeActivity(${sid()},4,${pts});$('nextBtn').disabled=false;flash('Game complete!','good')">✓ Claim Score</button>
+    <button class="btn btn-ghost" style="margin-left:8px;margin-top:12px" onclick="state.catcherState=null;$('actContent').innerHTML=renderCatcherGame();setTimeout(initCatcherGame,30)">↺ Play Again</button>
+  </div>`;
+}
+
+// ---- SPEED QUIZ ----
+let sqTimer = null;
+let sqTimeLeft = 4;
+
+function renderSpeedQuiz(){
+  return `<div>
+    <p style="color:var(--dim);font-size:.9rem;margin-bottom:8px">
+      ⚡ <strong>Speed Quiz!</strong> True or False? Answer before the timer runs out!
+    </p>
+    <div class="quiz-countdown">
+      <div class="countdown-ring">
+        <svg class="countdown-svg" viewBox="0 0 50 50">
+          <circle cx="25" cy="25" r="21" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="4"/>
+          <circle class="countdown-circle" id="sqRing" cx="25" cy="25" r="21" stroke-dasharray="132" stroke-dashoffset="0"/>
+        </svg>
+        <div class="countdown-num" id="sqNum">4</div>
+      </div>
+      <div class="quiz-q-counter" id="sqCounter">Question 1 / ${sec().speedQuizItems.length}</div>
+    </div>
+    <div class="quiz-statement" id="sqStatement">Get ready...</div>
+    <div class="quiz-btns">
+      <button class="btn quiz-tf-btn true-btn" onclick="answerQuiz(true)">✓ TRUE</button>
+      <button class="btn quiz-tf-btn false-btn" onclick="answerQuiz(false)">✗ FALSE</button>
+    </div>
+    <div id="sqResult"></div>
+  </div>`;
+}
+
+function initSpeedQuiz(){
+  state.quizState = {
+    items: shuffle(sec().speedQuizItems),
+    current: 0,
+    score: 0,
+    errors: 0,
+    answered: false,
+  };
+  setTimeout(loadSQQuestion, 400);
+}
+
+function loadSQQuestion(){
+  const qs = state.quizState; if(!qs) return;
+  if(qs.current >= qs.items.length){ endSpeedQuiz(); return; }
+  const item = qs.items[qs.current];
+  const stmt = $('sqStatement'); if(stmt) stmt.textContent = item.stmt;
+  const ctr = $('sqCounter'); if(ctr) ctr.textContent = `Question ${qs.current+1} / ${qs.items.length}`;
+  qs.answered = false;
+  // Reset buttons
+  document.querySelectorAll('.quiz-tf-btn').forEach(b => { b.classList.remove('correct-ans','wrong-ans'); b.disabled = false; });
+  // Start timer
+  sqTimeLeft = 4;
+  if(sqTimer) clearInterval(sqTimer);
+  sqTimer = setInterval(sqTick, 100);
+  updateSQTimer();
+}
+
+function sqTick(){
+  const qs = state.quizState; if(!qs) return;
+  if(qs.answered){ clearInterval(sqTimer); return; }
+  sqTimeLeft -= 0.1;
+  if(sqTimeLeft <= 0){ sqTimeLeft = 0; answerQuiz(null); }
+  updateSQTimer();
+}
+
+function updateSQTimer(){
+  const pct = sqTimeLeft / 4;
+  const ring = $('sqRing');
+  if(ring) ring.style.strokeDashoffset = 132 * (1 - pct);
+  const num = $('sqNum');
+  if(num) num.textContent = Math.ceil(sqTimeLeft);
+  if(sqTimeLeft <= 1 && ring) ring.style.stroke = 'var(--danger)';
+  else if(ring) ring.style.stroke = 'var(--brass)';
+}
+
+function answerQuiz(answer){
+  const qs = state.quizState; if(!qs || qs.answered) return;
+  qs.answered = true;
+  clearInterval(sqTimer);
+  // Disable both buttons immediately to prevent double-tap
+  document.querySelectorAll('.quiz-tf-btn').forEach(b => b.disabled = true);
+  const item = qs.items[qs.current];
+  const correct = answer !== null && answer === item.ans;
+  if(correct){
+    qs.score += 2;
+    flash('✓ Correct! +2','good');
+    const btn = answer ? document.querySelector('.true-btn') : document.querySelector('.false-btn');
+    if(btn) btn.classList.add('correct-ans');
+  } else {
+    qs.errors++;
+    qs.score = Math.max(0, qs.score - 1);
+    if(answer === null){
+      // Timed out – show correct answer only, don't highlight a wrong button
+      flash("⏰ Time's up! " + item.explain, 'bad');
+    } else {
+      flash('✗ Wrong! ' + item.explain, 'bad');
+      const wrongBtn = answer ? document.querySelector('.true-btn') : document.querySelector('.false-btn');
+      if(wrongBtn) wrongBtn.classList.add('wrong-ans');
+    }
+    const correctBtn = item.ans ? document.querySelector('.true-btn') : document.querySelector('.false-btn');
+    if(correctBtn) correctBtn.classList.add('correct-ans');
+  }
+  qs.current++;
+  setTimeout(loadSQQuestion, 1500);
+}
+
+function endSpeedQuiz(){
+  const qs = state.quizState; if(!qs) return;
+  clearInterval(sqTimer);
+  const pts = Math.min(10, qs.score);
+  const stmt = $('sqStatement');
+  if(stmt) stmt.textContent = '⚡ Quiz Complete!';
+  const res = $('sqResult');
+  if(res) res.innerHTML = `<div style="text-align:center;padding:16px;background:rgba(255,255,255,.05);border-radius:8px;margin-top:12px">
+    <p style="font-size:1.3rem;color:var(--brass)">🏆 Results!</p>
+    <p>Correct: <strong style="color:var(--success)">${qs.score>0?Math.floor(qs.score/2):0}</strong> | Wrong: <strong style="color:var(--danger)">${qs.errors}</strong> | Points: <strong style="color:var(--brass)">${pts}</strong></p>
+    <button class="btn btn-gold mt-12" onclick="completeActivity(${sid()},4,${pts});$('nextBtn').disabled=false;flash('Quiz complete!','good')">✓ Claim Score</button>
+    <button class="btn btn-ghost" style="margin-left:8px;margin-top:12px" onclick="state.quizState=null;sqTimer=null;sqTimeLeft=4;$('actContent').innerHTML=renderSpeedQuiz();setTimeout(initSpeedQuiz,30)">↺ Try Again</button>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════
+//  ACT 5: C O M P R E H E N S I O N
+// ═══════════════════════════════════════════════
+let compAnswers = {};
+let compChecked = false;
+function getCompQuestions(){
+  const info = currentSubsectionFor(5);
+  if(info && info.sub.quickQuestion){
+    const q = info.sub.quickQuestion;
+    return [{q:q.q,type:'inference',opts:q.opts,ans:q.ans,explain:'Go back to this part of the text and think about the writer&#39;s meaning.'}];
+  }
+  return sec().comprehension;
+}
+function renderComprehension(){
+  const qs = getCompQuestions();
+  const info = currentSubsectionFor(5);
+  const openVal = getOpenEndedResponse();
+  return `<div>${subsectionHeader(5)}${fullTextBtn()}<p style="color:var(--dim);font-size:.9rem;margin-bottom:16px">${bi('Answer the question for this part before moving on. You can try again if needed.','ענו על השאלה של החלק הזה לפני שממשיכים. אפשר לנסות שוב אם צריך.')}</p>${qs.map((q,qi)=>`<div class="comp-question" id="cq${qi}"><div class="comp-q-type ${q.type}">${q.type==='higher-order'?'💭 HIGHER-ORDER THINKING':q.type==='factual'?'📌 FACTUAL':'🔍 INFERENCE'}</div><div class="comp-q-text">${q.q}</div><div class="comp-options">${q.opts.map((opt,oi)=>`<button class="comp-option" id="co${qi}_${oi}" onclick="selectCompOpt(${qi},${oi})">${String.fromCharCode(65+oi)}. ${opt}</button>`).join('')}</div><div class="comp-explanation" id="ce${qi}">${q.explain}</div></div>`).join('')}${lvl()===3 && info && info.idx === info.total-1 ? `<div class="card" style="background:rgba(255,255,255,.03)"><p style="font-weight:bold;color:var(--danger);margin-bottom:8px">Challenge response</p><p style="font-size:.9rem;margin-bottom:8px">${sec().openEndedQ||''}</p><textarea id="openEndedAnswer" rows="5" placeholder="Write 2–4 thoughtful sentences..." oninput="setOpenEndedResponse(this.value)">${openVal}</textarea></div>` : ''}<button class="btn btn-gold" id="compSubmitBtn" onclick="checkComp()">${bi('⚙️ Check Answers','⚙️ בדוק תשובות')}</button><div id="compResult"></div></div>`;
+}
+function initComprehension(){ compAnswers = {}; compChecked = false; }
+function selectCompOpt(qi, oi){ if(compChecked) return; const qs = getCompQuestions(); qs[qi].opts.forEach((_,j)=>{ const el=$('co'+qi+'_'+j); if(el) el.classList.remove('selected'); }); const el = $('co'+qi+'_'+oi); if(el) el.classList.add('selected'); compAnswers[qi] = oi; }
+function resetComp(){ compChecked = false; compAnswers = {}; const qs=getCompQuestions(); qs.forEach((q,qi)=>{ q.opts.forEach((_,oi)=>{ const el=$('co'+qi+'_'+oi); if(el){ el.disabled=false; el.classList.remove('selected','correct','wrong'); } }); const exp=$('ce'+qi); if(exp) exp.classList.remove('show'); }); const res=$('compResult'); if(res) res.innerHTML=''; }
+function checkComp(){
+  if(compChecked) return;
+  const qs = getCompQuestions();
+  if(Object.keys(compAnswers).length < qs.length){ flash('Please answer the question first!','bad'); return; }
+  const openEnded = $('openEndedAnswer');
+  if(openEnded && !isSubstantialText(openEnded.value.trim(), 10, 40)){ flash(bi('Write a fuller challenge response (at least 10 words).','כתבו תגובה ארוכה יותר לאתגר – לפחות 10 מילים.'),'bad'); return; }
+  if(openEnded) setOpenEndedResponse(openEnded.value);
+  compChecked = true;
+  let correct = 0;
+  qs.forEach((q,qi)=>{ const chosen=compAnswers[qi]; q.opts.forEach((_,oi)=>{ const el=$('co'+qi+'_'+oi); if(!el) return; el.disabled=true; if(oi===q.ans) el.classList.add('correct'); else if(oi===chosen) el.classList.add('wrong'); }); const exp=$('ce'+qi); if(exp) exp.classList.add('show'); if(chosen===q.ans) correct++; });
+  const allCorrect = correct===qs.length;
+  let pts = Math.max(0, Math.round((correct/qs.length)*10));
+  if(openEnded) pts = Math.min(10, pts + 2);
+  const res=$('compResult');
+  if(allCorrect){
+    if(res) res.innerHTML = `<div style="margin-top:16px;padding:16px;background:rgba(255,255,255,.05);border-radius:8px;text-align:center"><p style="font-size:1.1rem">Correct: <strong style="color:var(--success)">${correct}/${qs.length}</strong> &nbsp;|&nbsp; Points: <strong style="color:var(--brass)">${pts}</strong></p><p style="color:var(--success);margin-top:4px">🎉 Well done!</p></div>`;
+    const submitBtn = $('compSubmitBtn'); if(submitBtn) submitBtn.disabled = true;
+    setTimeout(() => progressSubActivity(5, pts), 700);
+  } else {
+    if(res) res.innerHTML = `<div style="margin-top:16px;padding:16px;background:rgba(255,255,255,.05);border-radius:8px;text-align:center"><p style="font-size:1rem">You got <strong style="color:var(--brass)">${correct}/${qs.length}</strong> correct.</p><p style="color:var(--dim);margin:8px 0">${bi('Read the explanation and try again.','קראו את ההסבר ונסו שוב.')}</p><button class="btn btn-outline" onclick="resetComp()">${bi('↺ Try Again','↺ נסה שוב')}</button></div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  ACT 6: L I S T E N   A G A I N
+// ═══════════════════════════════════════════════
+function renderListenAgain(){
+  const reflection = getReflection();
+  return `<div>${fullTextBtn()}
+    <p style="color:var(--dim);font-size:.9rem;margin-bottom:12px">${bi('Listen to the text again. Then write one reflection. Both are required.','האזינו שוב לקטע ואז כתבו מחשבה אחת. שני הדברים חובה.')}</p>
+    ${lvl()===1?`<div style="padding:12px;background:rgba(201,162,39,.08);border-radius:8px;margin-bottom:12px;font-size:.85rem">${bi('Tip: listen for the main idea. Then write one simple sentence in Hebrew or English.','טיפ: הקשיבו לרעיון המרכזי ואז כתבו משפט אחד פשוט בעברית או באנגלית.')}</div>`:''}
+    <div class="card" style="background:rgba(255,255,255,.03);font-size:.95rem;line-height:1.8;margin-bottom:16px">${sec().text.split('\n').join('<br><br>')}</div>
+    <div class="audio-controls"><button class="audio-btn" id="audioPlayBtn" onclick="toggleAudioLA()">▶</button><div class="audio-status" id="audioStatus">Ready to listen again</div><button class="audio-btn" onclick="stopSpeech()" style="font-size:.9rem">⏹</button></div>
+    <div class="card mt-16" style="background:rgba(255,255,255,.03)">
+      <p style="font-weight:bold;margin-bottom:8px;color:var(--brass)">💭 Reflection / מחשבה</p>
+      <p style="font-size:.9rem;color:var(--dim);margin-bottom:12px">${bi('Write one thing you found interesting, surprising, or important.','כתבו דבר אחד שהיה מעניין, מפתיע או חשוב.')}</p>
+      <textarea id="reflectionBox" placeholder="Type your reflection here... / כתבו כאן" rows="4" oninput="setReflection(this.value)">${reflection}</textarea>
+    </div>
+    <button class="btn btn-success mt-16 btn-block" onclick="completeListenAgain()">${bi('✓ Complete: Listened + Reflection','✓ הסתיים: האזנה + מחשבה')}</button>
+  </div>`;
+}
+
+function completeListenAgain(){
+  if(!hasAudioSufficient(true)){ flash(bi('Please listen for longer before continuing.','האזינו יותר זמן לפני שממשיכים.'),'bad'); return; }
+  const reflection = (($('reflectionBox')||{}).value || '').trim();
+  if(!isSubstantialText(reflection, 10, 40)){ flash(bi('Write a longer reflection (at least 10 words).','כתבו מחשבה ארוכה יותר – לפחות 10 מילים.'),'bad'); return; }
+  setReflection(reflection);
+  completeActivity(sid(),6,0); $('nextBtn').disabled=false; flash(bi('Listen again + reflection complete!','האזנה ומחשבה הושלמו!'),'good');
+}
+
+function initListenAgain(){ if(isComplete(sid(),6)){ const btn=$('nextBtn'); if(btn) btn.disabled=false; } }
+function toggleAudioLA(){
+  if(ttsActive){ stopSpeech(); return; }
+  speakText(sec().text, null, ()=>{},
+    ()=>{ markAudioStarted('listenAgainStarted'); },
+    ()=>{ markAudioSufficient(true); });
+}
+
+// ═══════════════════════════════════════════════
+//  ACT 7: T R A N S L A T I O N
+// ═══════════════════════════════════════════════
+function renderTranslation(){
+  return `<div>${fullTextBtn()}
+    <p style="color:var(--dim);font-size:.9rem;margin-bottom:16px">
+      ${bi('First write your own translation attempt. Then compare it with the provided full-section Hebrew translation.','קודם נסו לכתוב תרגום משלכם. אחר כך השוו לתרגום בעברית של כל הקטע.')}
+    </p>
+    <div class="card" style="background:rgba(255,255,255,.03);font-size:.95rem;line-height:1.8;margin-bottom:16px">
+      ${sec().text.split('\n').join('<br><br>')}
+    </div>
+    <p style="font-size:.9rem;color:var(--dim);margin-bottom:8px">✏️ Your translation attempt:</p>
+    <textarea id="translationAttempt" placeholder="כתוב את התרגום שלך כאן..." rows="6" style="direction:rtl;text-align:right;margin-bottom:16px" oninput="setTranslationAttempt(this.value)">${getTranslationAttempt() || ''}</textarea>
+    <p style="font-size:.78rem;color:var(--dim);margin:-6px 0 12px">${lvl()===1?'אפשר לכתוב קודם רעיון כללי בעברית או באנגלית. התרגום המוכן הוא לכל הקטע.':'The provided translation is for the full section.'}</p>
+    <button class="btn btn-gold btn-block mb-12" onclick="revealTranslation()">${bi('🌍 Reveal Translation','🌍 הצג תרגום')}</button>
+    <div class="translation-text" id="translationReveal" dir="rtl">${sec().translationHebrew||''}</div>
+    <div id="translationCompleteWrap" class="mt-12"></div>
+  </div>`;
+}
+
+function revealTranslation(){
+  const attempt = (($('translationAttempt')||{}).value || '').trim();
+  setTranslationAttempt(attempt);
+  if(!isSubstantialText(attempt, 5, 20)){
+    flash(bi('Write a real translation attempt first (at least one sentence).','כתבו ניסיון תרגום אמיתי קודם – לפחות משפט אחד.'),'bad');
+    return;
+  }
+  const el = $('translationReveal');
+  if(el) el.classList.add('show');
+  const wrap = $('translationCompleteWrap');
+  if(wrap){
+    wrap.innerHTML = `<button class="btn btn-success" onclick="completeActivity(${sid()},7,0);$('nextBtn').disabled=false;flash(bi('Translation step complete!','שלב התרגום הושלם!'),'good')">${bi('✓ Complete Translation Step','✓ סיים שלב תרגום')}</button>`;
+  }
+  saveProgress();
+  flash('Translation revealed!','info');
+}
+
+// ═══════════════════════════════════════════════
+//  ACT 8: R E C O R D I N G
+// ═══════════════════════════════════════════════
+function renderRecording(){
+  const alreadyRecorded = state.recordingSection !== null && state.recordingSection !== sid() && state.recordingPlayed;
+  if(alreadyRecorded){
+    // Complete silently - no DOM access needed here, buttons handled elsewhere
+    setTimeout(()=>completeActivity(sid(),8,0), 0);
+    return `<div style="text-align:center;padding:24px">
+      <div style="font-size:3rem;margin-bottom:12px">✅</div>
+      <h3 style="color:var(--success);margin-bottom:8px">Recording Complete!</h3>
+      <p style="color:var(--dim)">You already recorded and listened back to one section. Great job!</p>
+      <p style="font-size:.85rem;color:var(--dim);margin-top:12px">You only need to record ONE section.</p>
+    </div>`;
+  }
+  return `<div>${fullTextBtn()}
+    <p style="color:var(--dim);font-size:.9rem;margin-bottom:16px">
+      ${bi('🎤 Choose ONE section to record yourself reading aloud. This helps improve your pronunciation and fluency.','🎤 בחרו קטע אחד להקליט את עצמכם קוראים בקול רם. זה עוזר לשפר את ההגייה והשטף שלכם.')}
+    </p>
+    <div class="card" style="background:rgba(255,255,255,.03);font-size:.95rem;line-height:1.8;margin-bottom:16px;max-height:200px;overflow-y:auto">
+      ${sec().text.split('\n')[0]}...
+    </div>
+    <div class="recording-controls">
+      <p class="rec-status" id="recStatus">${bi('Press the button to start recording. Play it back once to complete this step.','לחצו על הכפתור כדי להתחיל להקליט. האזינו לקטע שהקלטתם כדי לסיים.')}</p>
+      <button class="rec-btn rec-btn-start" id="recBtn" onclick="startRecording()">🎤</button>
+      <p style="font-size:.8rem;color:var(--dim);text-align:center">
+        Tip: Read clearly and at a steady pace. You can re-record if you want.
+      </p>
+    </div>
+    <div class="rec-playback" id="recPlayback"></div>
+    ${state.recordingBlob && state.recordingSection===sid()?
+      `<p style="color:var(--success);text-align:center;margin-top:8px">✅ Recording saved!</p>`:''}
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════
+//  R E S U L T S
+// ═══════════════════════════════════════════════
+function renderResults(){
+  const pct = finalPercent();
+  const grade = pct>=90?'⭐⭐⭐ Outstanding!':pct>=75?'⭐⭐ Well Done!':pct>=60?'⭐ Good Job!':'Keep Practicing!';
+  const s1 = sectionScore(1), s2 = sectionScore(2), s3 = sectionScore(3);
+  const summary = generateSummary(pct, s1, s2, s3);
+
+  return `<div class="results-screen fade-in">
+    <h1 style="color:var(--brass);font-size:2.5rem">🏆 MISSION COMPLETE</h1>
+    <div class="score-circle">
+      <div class="score-num">${pct}%</div>
+      <div class="score-pct">${grade}</div>
+    </div>
+    <div class="card" style="max-width:600px;width:100%;text-align:left;margin:0 auto">
+      <table class="results-table">
+        <thead><tr><th>Mission</th><th>Score</th><th>Stars</th></tr></thead>
+        <tbody>
+          <tr><td>Part 1: Rube Goldberg</td><td>${sectionPct(1)}%</td><td class="stars">${s1>=30?'★★★':s1>=20?'★★☆':'★☆☆'}</td></tr>
+          <tr><td>His Drawings</td><td>${sectionPct(2)}%</td><td class="stars">${s2>=30?'★★★':s2>=20?'★★☆':'★☆☆'}</td></tr>
+          <tr><td>The Contest</td><td>${sectionPct(3)}%</td><td class="stars">${s3>=30?'★★★':s3>=20?'★★☆':'★☆☆'}</td></tr>
+          <tr style="border-top:2px solid var(--brass)"><td><strong>TOTAL SCORE</strong></td><td><strong style="color:var(--brass)">${pct}%</strong></td><td class="stars">${grade}</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Bonus Creative Task -->
+    <div class="bonus-section" style="max-width:600px;width:100%;margin:16px auto 0">
+      <div class="bonus-title">🔥 BONUS: Build Your Own Rube Goldberg Idea!</div>
+      <p style="font-size:.85rem;color:var(--dim);margin-bottom:12px">Design your own crazy machine idea. Answer the questions below:</p>
+      <div class="bonus-inputs">
+        <div>
+          <p class="bonus-label">What simple task will your machine do?</p>
+          <input type="text" id="bonusTask" placeholder="e.g., sharpen a pencil, pour a glass of water..." value="${state.bonusTask.task}" oninput="state.bonusTask.task=this.value;saveProgress()">
+        </div>
+        <div>
+          <p class="bonus-label">Describe at least 3 chain reaction steps:</p>
+          <textarea id="bonusSteps" rows="4" placeholder="Step 1: A ball rolls down a ramp...\nStep 2: The ball hits a book...\nStep 3: The book pushes a cup..." oninput="state.bonusTask.steps=this.value;saveProgress()">${state.bonusTask.steps}</textarea>
+        </div>
+        <div>
+          <p class="bonus-label">What everyday objects will you use?</p>
+          <input type="text" id="bonusObjects" placeholder="e.g., ball, ramp, string, cup, book..." value="${state.bonusTask.objects}" oninput="state.bonusTask.objects=this.value;saveProgress()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Copyable Summary -->
+    <div class="card" style="max-width:600px;width:100%;margin:16px auto 0">
+      <p style="font-family:var(--font-head);color:var(--brass);margin-bottom:8px">📋 Copyable Summary</p>
+      <div class="copy-box" id="summaryBox">${summary}</div>
+      <button class="btn btn-gold btn-block mt-8" onclick="copySummary()">📋 Copy Summary</button>
+    </div>
+
+    <div class="card" style="max-width:600px;width:100%;margin:16px auto 0">
+      <p style="font-family:var(--font-head);color:var(--brass);margin-bottom:12px">📤 Share Results with Teacher</p>
+
+      <div style="margin-bottom:16px;padding:12px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid var(--border)">
+        <p style="font-size:.8rem;color:var(--brass);font-family:var(--font-head);letter-spacing:.5px;margin-bottom:8px">STEP 1 – SAVE YOUR RESULTS IMAGE</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-blue" style="flex:1;touch-action:manipulation" onclick="shareResultsNative()">📱 Share / Save Image</button>
+          <button class="btn btn-outline" style="flex:1;touch-action:manipulation" onclick="downloadResultsImage()">⬇ Download Image</button>
+        </div>
+        <p style="font-size:.75rem;color:var(--dim);margin-top:8px">On phones: tap "Share" to open the share menu. On computers: tap "Download".</p>
+      </div>
+
+      <div style="padding:12px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid var(--border)">
+        <p style="font-size:.8rem;color:var(--brass);font-family:var(--font-head);letter-spacing:.5px;margin-bottom:8px">STEP 2 – SEND TO TEACHER VIA WHATSAPP</p>
+        <label style="display:block;font-size:.85rem;color:var(--dim);margin-bottom:6px">Teacher's WhatsApp number (with country code):</label>
+        <input type="tel" id="teacherPhone" placeholder="e.g. 9725XXXXXXXX" value="${state.teacherPhone || ''}" oninput="state.teacherPhone=this.value;saveProgress()" style="margin-bottom:10px">
+        <button class="btn btn-success btn-block" style="touch-action:manipulation" onclick="shareViaWhatsApp()">💬 Send via WhatsApp</button>
+        <p style="font-size:.75rem;color:var(--dim);margin-top:8px">WhatsApp opens with your score summary. Attach the results image and your recording before sending.</p>
+      </div>
+    </div>
+
+    ${state.recordingBlobBase64 ? `<div class="card" style="max-width:600px;width:100%;margin:16px auto 0;border-color:rgba(39,174,96,.4)">
+      <p style="font-family:var(--font-head);color:var(--success);margin-bottom:8px">🎤 Recording Available</p>
+      <p style="font-size:.85rem;color:var(--dim);margin-bottom:12px">Your recording is saved. Download it and attach it when you send to your teacher.</p>
+      <button class="btn btn-success btn-block" onclick="downloadRecording()">⬇ Download My Recording</button>
+      <p style="font-size:.75rem;color:var(--dim);margin-top:8px">📎 Attach this file to your WhatsApp message manually before sending.</p>
+    </div>` : ''}
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:24px">
+      <button class="btn btn-outline" onclick="go('hub')">← Back to Hub</button>
+      <button class="btn btn-ghost" onclick="resetAllProgress()">↺ Start Over</button>
+    </div>
+  </div>`;
+}
+
+function generateSummary(pct, s1, s2, s3){
+  var d = new Date();
+  var lvlLabel = ['','Support (L1)','Standard (L2)','Challenge (L3)'][state.level]||'';
+  var SEP  = '==========================================';
+  var SEP2 = '------------------------------------------';
+
+  function getField(obj, key){ return (obj && obj[key]) || ''; }
+
+  function sectionBlock(secId, secTitle){
+    // Keys generated by sectionKey(prefix, id) = prefix+'_'+id
+    var trans = getField(state.translationAttempts, 'translation_'+secId);
+    var refl  = getField(state.reflections,         'reflection_'+secId);
+    var open  = getField(state.openEndedResponses,  'open_'+secId);
+    var sp    = sectionPct(secId);
+    var block = '\n'+secTitle+' ('+sp+'%)\n'+SEP2;
+    if(trans){ block += '\nTranslation:\n  '+trans.replace(/\n/g,'\n  '); }
+    else      { block += '\nTranslation: (not submitted)'; }
+    if(refl){  block += '\n\nReflection:\n  '+refl.replace(/\n/g,'\n  '); }
+    else      { block += '\n\nReflection: (not submitted)'; }
+    if(open){  block += '\n\nOpen-ended response:\n  '+open.replace(/\n/g,'\n  '); }
+    return block;
+  }
+
+  var body = '';
+  body += 'CRAZY INVENTIONS: Rube Goldberg Challenge\n';
+  body += SEP+'\n';
+  body += 'Student:      '+state.name+'\n';
+  body += 'Date:         '+d.toLocaleDateString()+'\n';
+  body += 'Level:        '+lvlLabel+'\n';
+  body += '\nSCORES\n'+SEP2+'\n';
+  body += 'Part 1 – Rube Goldberg:  '+sectionPct(1)+'%\n';
+  body += 'Part 2 – His Drawings:   '+sectionPct(2)+'%\n';
+  body += 'Part 3 – The Contest:    '+sectionPct(3)+'%\n';
+  body += 'TOTAL:                   '+pct+'%\n';
+  body += '\nActivities completed: '+Object.values(state.completedActivities).flat().length;
+  body += '\nRecording: '+(state.recordingSection ? 'Yes – Section '+state.recordingSection : 'No');
+
+  body += '\n\n'+SEP+'\nSTUDENT WORK\n'+SEP;
+  body += sectionBlock(1, 'SECTION 1: Rube Goldberg');
+  body += '\n'+sectionBlock(2, 'SECTION 2: His Drawings');
+  body += '\n'+sectionBlock(3, 'SECTION 3: The Contest');
+
+  if(state.bonusTask && state.bonusTask.task){
+    body += '\n\n'+SEP+'\nBONUS TASK\n'+SEP2+'\n';
+    body += 'Task:     '+state.bonusTask.task+'\n';
+    if(state.bonusTask.steps)   body += 'Steps:\n  '+state.bonusTask.steps.replace(/\n/g,'\n  ')+'\n';
+    if(state.bonusTask.objects) body += 'Objects:  '+state.bonusTask.objects+'\n';
+  }
+
+  if(state.recordingBlobBase64){
+    body += '\n'+SEP+'\nRECORDING\n'+SEP2+'\n';
+    body += '🎤 Recording completed.\n';
+    body += 'Please download the recording from the results page\n';
+    body += 'and attach it to this message before sending.\n';
+  }
+
+  body += '\n'+SEP;
+  return body;
+}
+
+function downloadRecording(){
+  if(!state.recordingBlobBase64) return;
+  const a = document.createElement('a');
+  a.href = state.recordingBlobBase64;
+  a.download = (state.name||'student').replace(/[^a-z0-9]/gi,'_')+'_recording.webm';
+  a.style.display='none';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>document.body.removeChild(a),200);
+  flash('Recording downloaded!','good');
+}
+
+function copySummary(){
+  const box = $('summaryBox');
+  if(!box) return;
+  const text = box.textContent;
+  navigator.clipboard.writeText(text).then(()=>flash('✓ Copied!','good')).catch(()=>{
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); ta.remove();
+    flash('✓ Copied!','good');
+  });
+}
+
+// ═══════════════════════════════════════════════
+//  S H A R E   R E S U L T S
+// ═══════════════════════════════════════════════
+function ensureResultsImage(){
+  // Always regenerate to reflect latest scores; canvas may be in or out of DOM
+  const canvas = document.createElement('canvas');
+  canvas.width = 1200; canvas.height = 1600;
+  const ctx = canvas.getContext('2d');
+  const pct = finalPercent();
+  const s1 = sectionScore(1), s2 = sectionScore(2), s3 = sectionScore(3);
+  ctx.fillStyle = '#0d0d0d'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  const grad = ctx.createLinearGradient(0,0,canvas.width,canvas.height);
+  grad.addColorStop(0,'#1a1610'); grad.addColorStop(1,'#2b1d12');
+  ctx.fillStyle = grad; ctx.fillRect(40,40,1120,1520);
+  ctx.strokeStyle = '#c9a227'; ctx.lineWidth = 6; ctx.strokeRect(40,40,1120,1520);
+  ctx.fillStyle = '#c9a227';
+  ctx.font = 'bold 60px "Trebuchet MS",Arial,sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('CRAZY INVENTIONS', 600, 140);
+  ctx.font = '30px "Trebuchet MS",Arial,sans-serif';
+  ctx.fillStyle = '#f0ece0';
+  ctx.fillText('Rube Goldberg Challenge Results', 600, 190);
+  ctx.beginPath(); ctx.arc(600, 340, 120, 0, Math.PI*2);
+  ctx.strokeStyle='#c9a227'; ctx.lineWidth=10; ctx.stroke();
+  ctx.fillStyle='#c9a227'; ctx.font='bold 88px "Courier New",monospace';
+  ctx.fillText(pct + '%', 600, 370);
+  const lvlSafe = ['','Support','Standard','Challenge'][state.level]||'';
+  const nameSafe = (state.name||'').replace(/[\x80-\uFFFF]/g,'').trim();
+  ctx.fillStyle='#f0ece0'; ctx.textAlign='left';
+  ctx.font = '36px Georgia,serif';
+  const lines = [
+    'Student: ' + nameSafe,
+    'Level: ' + lvlSafe,
+    'Total Score: ' + pct + '%',
+    'Part 1 - Rube Goldberg: ' + sectionPct(1) + '%',
+    'Part 2 - His Drawings: ' + sectionPct(2) + '%',
+    'Part 3 - The Contest: ' + sectionPct(3) + '%',
+    'Recorded: ' + (state.recordingSection ? 'Yes' : 'No'),
+    'Activities: ' + Object.values(state.completedActivities).flat().length + ' completed'
+  ];
+  let y = 520;
+  lines.forEach(function(line){ ctx.fillText(line, 120, y); y += 74; });
+  if(state.bonusTask && state.bonusTask.task){
+    ctx.fillStyle='#c9a227'; ctx.font='bold 34px "Trebuchet MS",Arial';
+    ctx.fillText('Bonus Machine Idea:', 120, y+20);
+    ctx.fillStyle='#f0ece0'; ctx.font='30px Georgia,serif';
+    const bwrap = ([state.bonusTask.task,state.bonusTask.objects].filter(Boolean).join(' | ')).replace(/[\x80-\uFFFF]/g,'').slice(0,65);
+    ctx.fillText(bwrap, 120, y+70);
+  }
+  ctx.textAlign='center'; ctx.fillStyle='#8a8478'; ctx.font='24px "Courier New",monospace';
+  ctx.fillText(new Date().toLocaleDateString()+' '+new Date().toLocaleTimeString(), 600, 1500);
+  return canvas.toDataURL('image/png');
+}
+
+function dataURLtoFile(dataurl, filename) {
+  const arr = dataurl.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while(n--){ u8arr[n] = bstr.charCodeAt(n); }
+  return new File([u8arr], filename, {type:mime});
+}
+
+function resultsSummaryText(){
+  // Generate fresh every time – never depend on DOM (may be on different screen)
+  return generateSummary(finalPercent(), sectionScore(1), sectionScore(2), sectionScore(3));
+}
+
+async function shareResultsNative(){
+  try{
+    const dataUrl = ensureResultsImage();
+    const file = dataURLtoFile(dataUrl, `${(state.name||'student').replace(/[^a-z0-9]/gi,'_')}_results.png`);
+    const text = resultsSummaryText();
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({ title:'Rube Goldberg Results', text, files:[file] });
+      flash('Share sheet opened','good');
+      return;
+    }
+    if(navigator.share){
+      await navigator.share({ title:'Rube Goldberg Results', text });
+      return;
+    }
+    flash('Native sharing is not supported on this device. Download the image instead.','info');
+  } catch(e){
+    // AbortError = user closed the share dialog; anything else is a real error
+    if(e && e.name !== 'AbortError'){
+      flash('Could not share. Try downloading the image instead.','bad');
+    }
+  }
+}
+
+function downloadResultsImage(){
+  const dataUrl = ensureResultsImage();
+  const a = document.createElement('a');
+  a.href = dataUrl;
+  a.download = `${(state.name||'student').replace(/[^a-z0-9]/gi,'_')}_results.png`;
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => document.body.removeChild(a), 200);
+  flash('Results image downloaded!','good');
+}
+
+function normalizePhone(phone){
+  return (phone || '').replace(/[^\d]/g,'');
+}
+
+function shareViaWhatsApp(){
+  const phone = normalizePhone(($('teacherPhone')||{}).value || state.teacherPhone || '');
+  state.teacherPhone = phone;
+  saveProgress();
+  if(!phone){ flash('Please enter the teacher phone number first','bad'); return; }
+  const recNote = state.recordingBlobBase64
+    ? '\n\n🎤 IMPORTANT: Please also download and attach your recording file from the results page.'
+    : '';
+  const msg = resultsSummaryText() + '\n\nPlease attach the results screenshot.' + recNote;
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// ═══════════════════════════════════════════════
+//  E V E N T   L I S T E N E R S
+// ═══════════════════════════════════════════════
+function attachListeners(){
+  const ni = $('nameInput');
+  if(ni && !ni._listened){
+    ni._listened = true;
+    ni.addEventListener('keydown', e => { if(e.key==='Enter') submitName(); });
+  }
+  // results image generated on demand in share/download functions
+}
+
+// ═══════════════════════════════════════════════
+//  I N I T
+// ═══════════════════════════════════════════════
+// Preload voices - critical for first-play reliability on Chrome/Android
+if(typeof speechSynthesis !== 'undefined'){
+  // Trigger voice list fetch
+  speechSynthesis.getVoices();
+  if(speechSynthesis.onvoiceschanged !== undefined){
+    speechSynthesis.onvoiceschanged = () => {
+      speechSynthesis.getVoices(); // cache them
+    };
+  }
+}
+
+// Handle page visibility (stop audio when tab hidden)
+document.addEventListener('visibilitychange', () => {
+  if(document.hidden) stopSpeech();
+});
+
+// Start app
+if(!loadProgress()) state.screen = 'welcome';
+render();
+</script>
+</body>
+</html>
