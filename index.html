@@ -2512,6 +2512,14 @@ function revealTranslation(){
 // ═══════════════════════════════════════════════
 //  ACT 8: R E C O R D I N G
 // ═══════════════════════════════════════════════
+function skipRecording(){
+  var secId = sid();
+  completeActivity(secId, 8, 0);
+  var btn = $('nextBtn');
+  if(btn) btn.disabled = false;
+  flash('Recording skipped – you can continue.','info');
+}
+
 function renderRecording(){
   const alreadyRecorded = state.recordingSection !== null && state.recordingSection !== sid() && state.recordingPlayed;
   if(alreadyRecorded){
@@ -2548,8 +2556,8 @@ function renderRecording(){
         If your microphone isn't working, you can skip this step.
         Let your teacher know so they can note it.
       </p>
-      <button class="btn btn-ghost" style="font-size:.82rem;padding:8px 18px"
-        onclick="completeActivity(sid(),8,0);$('nextBtn').disabled=false;flash('Recording skipped – you can continue.','info')">
+      <button class="btn btn-ghost" style="font-size:.82rem;padding:8px 18px;touch-action:manipulation"
+        onclick="skipRecording()">
         Skip Recording (microphone unavailable)
       </button>
     </div>
