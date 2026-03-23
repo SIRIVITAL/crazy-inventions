@@ -932,8 +932,29 @@ function loadProgress(){
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if(!raw) return false;
-    const saved = JSON.parse(raw);
+    let saved;
+    try {
+      saved = JSON.parse(raw);
+    } catch(parseErr) {
+      console.warn('Saved progress is corrupted – could not parse JSON', parseErr);
+      return false;
+    }
+    // Merge saved fields into state – missing fields keep their defaults
     Object.assign(state, saved);
+    // Ensure nested objects that may be missing from older saves have defaults
+    if(!state.translationAttempts)   state.translationAttempts   = {};
+    if(!state.reflections)           state.reflections           = {};
+    if(!state.audioStarted)          state.audioStarted          = {};
+    if(!state.listenAgainStarted)    state.listenAgainStarted    = {};
+    if(!state.openEndedResponses)    state.openEndedResponses    = {};
+    if(!state.audioSufficient)       state.audioSufficient       = {};
+    if(!state.listenAgainSufficient) state.listenAgainSufficient = {};
+    if(!state.subSteps)              state.subSteps              = {};
+    if(!state.bonusTask)             state.bonusTask             = {task:'',steps:'',objects:''};
+    if(!state.completedActivities)   state.completedActivities   = {1:[],2:[],3:[]};
+    if(!state.unlockedSections)      state.unlockedSections      = [1];
+    if(!state.actScore)              state.actScore              = {};
+    // Restore recording blob from base64 if present
     if(saved.recordingBlobBase64){
       state.recordingBlob = base64ToBlob(saved.recordingBlobBase64);
     }
