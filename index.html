@@ -310,6 +310,21 @@ audio{width:100%;border-radius:8px;margin-top:8px;}
 @keyframes flashOut{to{opacity:0;transform:translate(-50%,-20px);}}
 
 /* ============ RESPONSIVE ============ */
+@media (max-width: 600px) {
+  .level-cards {
+    grid-template-columns: 1fr !important;
+  }
+
+  .level-card {
+    width: 100%;
+    min-width: 0;
+  }
+
+  #app {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+}
 @media(max-width:600px){
   #app{padding:12px;}
   .card{padding:16px;}
@@ -2526,6 +2541,18 @@ function renderRecording(){
     <div class="rec-playback" id="recPlayback"></div>
     ${state.recordingBlob && state.recordingSection===sid()?
       `<p style="color:var(--success);text-align:center;margin-top:8px">✅ Recording saved!</p>`:''}
+
+    <div style="margin-top:24px;padding:16px;border-radius:8px;background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.15);text-align:center">
+      <p style="font-size:.82rem;color:var(--dim);margin-bottom:10px">
+        🚫 <strong style="color:var(--cream)">Can't record?</strong>
+        If your microphone isn't working, you can skip this step.
+        Let your teacher know so they can note it.
+      </p>
+      <button class="btn btn-ghost" style="font-size:.82rem;padding:8px 18px"
+        onclick="completeActivity(sid(),8,0);$('nextBtn').disabled=false;flash('Recording skipped – you can continue.','info')">
+        Skip Recording (microphone unavailable)
+      </button>
+    </div>
   </div>`;
 }
 
@@ -2653,7 +2680,7 @@ function generateSummary(pct, s1, s2, s3){
   body += 'Part 3 – The Contest:    '+sectionPct(3)+'%\n';
   body += 'TOTAL:                   '+pct+'%\n';
   body += '\nActivities completed: '+Object.values(state.completedActivities).flat().length;
-  body += '\nRecording: '+(state.recordingSection ? 'Yes – Section '+state.recordingSection : 'No');
+  body += '\nRecording: '+(state.recordingSection ? 'Yes – Section '+state.recordingSection : (state.completedActivities && Object.values(state.completedActivities).some(arr=>arr.includes(8)) ? 'Skipped (microphone unavailable)' : 'No'));
 
   body += '\n\n'+SEP+'\nSTUDENT WORK\n'+SEP;
   body += sectionBlock(1, 'SECTION 1: Rube Goldberg');
@@ -2740,7 +2767,7 @@ function ensureResultsImage(){
     'Part 1 - Rube Goldberg: ' + sectionPct(1) + '%',
     'Part 2 - His Drawings: ' + sectionPct(2) + '%',
     'Part 3 - The Contest: ' + sectionPct(3) + '%',
-    'Recorded: ' + (state.recordingSection ? 'Yes' : 'No'),
+    'Recorded: ' + (state.recordingSection ? 'Yes' : (Object.values(state.completedActivities).some(arr=>arr.includes(8)) ? 'Skipped (mic unavailable)' : 'No')),
     'Activities: ' + Object.values(state.completedActivities).flat().length + ' completed'
   ];
   let y = 520;
